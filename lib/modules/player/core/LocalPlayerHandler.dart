@@ -54,7 +54,10 @@ class LocalPlayerHandler extends _$LocalPlayerHandler {
   }
 
   void stop() {
-    developer.log("Stop _currentMoveFuture:$_currentMoveFuture", name: "LocalPlayerHandler");
+    developer.log(
+      "Stop _currentMoveFuture:$_currentMoveFuture",
+      name: "LocalPlayerHandler",
+    );
     _currentMoveFuture?.complete();
     _currentMoveFuture = null;
   }

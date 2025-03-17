@@ -18,11 +18,11 @@ class GameScreenUiState {
   GameScreenUiState({required this.message});
 }
 
-@riverpod
+@Riverpod()
 class GameScreenUiStateNotifier extends _$GameScreenUiStateNotifier {
   @override
   GameScreenUiState build() {
-    final gameState = ref.watch(localGameStateManagerProvider("main"));
+    final gameState = ref.watch(localGameStateManagerProvider);
     developer.log('BUILD gameState:$gameState', name: 'GameScreenUiStateNotifier');
     final message = switch (gameState) {
       GameStateIdle() => 'Ready',
@@ -30,7 +30,7 @@ class GameScreenUiStateNotifier extends _$GameScreenUiStateNotifier {
         GamePlayer.player1 => 'Player 1 turn',
         GamePlayer.player2 => 'Player 2 turn',
       },
-      GameStateWinner() => 'Winner: ${gameState.playerWinner}',
+      GameStateEnded() => 'Winner: ${gameState.playerWinner}',
     };
 
     return GameScreenUiState(message: message);
@@ -50,7 +50,7 @@ class GameScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.read(gameScreenUiStateNotifierProvider);
+    final state = ref.watch(gameScreenUiStateNotifierProvider);
     return Scaffold(
       body: Stack(
         children: [

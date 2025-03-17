@@ -1,20 +1,17 @@
 import 'dart:async';
+import 'dart:developer' as developer;
 
 import 'package:async/async.dart';
 import 'package:clicktactoe/modules/game/core/manager/GameState.dart';
-import 'package:clicktactoe/modules/game/core/manager/GameStateManager.dart';
 import 'package:clicktactoe/modules/game/core/usecase/GetPlayerWinnerUseCase.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePlayer.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePoint.dart';
-import 'package:clicktactoe/modules/game/interfaces/domain/GamePointStatus.dart';
 import 'package:clicktactoe/modules/player/core/LocalPlayerHandler.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'dart:developer' as developer;
 
 part 'LocalGameStateManager.g.dart';
 
+@riverpod
 @Riverpod(keepAlive: true)
 class LocalGameStateManager extends _$LocalGameStateManager {
   final _player1Provider = localPlayerHandlerProvider("1");
@@ -23,14 +20,10 @@ class LocalGameStateManager extends _$LocalGameStateManager {
   CancelableOperation<void>? _playingTask;
 
   @override
-  GameState build(String key) {
+  GameState build() {
+    developer.log('BUILD', name: 'LocalGameStateManager');
     final player1Points = ref.watch(_player1Provider);
     final player2Points = ref.watch(_player2Provider);
-
-    // developer.log(
-    //   'BUILD player1Points:$player1Points player2Points:$player2Points',
-    //   name: 'LocalGameStateManager',
-    // );
 
     final playersPoints = _handlePlayerPoint(player1Points, player2Points);
 
@@ -38,11 +31,9 @@ class LocalGameStateManager extends _$LocalGameStateManager {
       getPlayerWinnerUseCaseProvider(player1Points, player2Points),
     );
 
-    // developer.log('BUILD winner:$winner', name: 'LocalGameStateManager');
-
-    if (winner != null) {
+    if (winner != null || playersPoints.length == 9) {
       stop();
-      return GameStateWinner(playerWinner: winner, table: playersPoints);
+      return GameStateEnded(playerWinner: winner, table: playersPoints);
     }
 
     developer.log('stateOrNull:$stateOrNull', name: 'LocalGameStateManager');
@@ -52,7 +43,8 @@ class LocalGameStateManager extends _$LocalGameStateManager {
     }
 
     ref.onDispose(() {
-      _playingTask?.cancel();
+      developer.log('onDispose', name: 'LocalGameStateManager');
+      stop();
     });
 
     return GameStateIdle();
@@ -61,7 +53,7 @@ class LocalGameStateManager extends _$LocalGameStateManager {
   void start() {
     state = GameStatePlaying.fromStart(GamePlayer.player1);
 
-    final player1 = ref.read(_player1Provider.notifier);
+    final player1 = ref.read(localPlayerHandlerProvider("1").notifier);
     final player2 = ref.read(_player2Provider.notifier);
 
     player1.restart();
@@ -72,8 +64,11 @@ class LocalGameStateManager extends _$LocalGameStateManager {
 
   @override
   void stop() {
-    ref.read(_player1Provider.notifier).stop();
-    ref.read(_player2Provider.notifier).stop();
+    final player1Notifier = ref.read(_player1Provider.notifier);
+    final player2Notifier = ref.read(_player2Provider.notifier);
+
+    player1Notifier.stop();
+    player2Notifier.stop();
 
     _playingTask?.cancel();
     _playingTask = null;

@@ -7,7 +7,7 @@ part of 'GameScreen.dart';
 // **************************************************************************
 
 String _$gameScreenUiStateNotifierHash() =>
-    r'bbb6c5eed5592cd5227f91f0212115c1dca54b4e';
+    r'a2e57be041c909ac3028f5a9a17907ee9d298abd';
 
 /// See also [GameScreenUiStateNotifier].
 @ProviderFor(GameScreenUiStateNotifier)

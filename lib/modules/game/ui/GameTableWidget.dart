@@ -39,24 +39,7 @@ class GameTableUiState {
 class GameTableUiStateNotifier extends _$GameTableUiStateNotifier {
   @override
   GameTableUiState build() {
-    final gameState = ref.watch(localGameStateManagerProvider("main"));
-    switch (gameState) {
-      case GameStateIdle():
-        developer.log(
-          'BUILD GameStateIdle gameState:$gameState',
-          name: 'GameTableUiStateNotifier',
-        );
-      case GameStatePlaying():
-        developer.log(
-          'BUILD GameStatePlaying gameState:$gameState',
-          name: 'GameTableUiStateNotifier',
-        );
-      case GameStateWinner():
-        developer.log(
-          'BUILD GameStateWinner gameState:$gameState',
-          name: 'GameTableUiStateNotifier',
-        );
-    }
+    final gameState = ref.watch(localGameStateManagerProvider);
     final gameUiState = ref.read(getGameTableUiStateProvider(gameState));
     developer.log(
       'BUILD gameState:$gameState gameUiState:$gameUiState',
@@ -68,12 +51,12 @@ class GameTableUiStateNotifier extends _$GameTableUiStateNotifier {
 
   void onPointSelected(int row, int column) {
     ref
-        .read(localGameStateManagerProvider("main").notifier)
+        .read(localGameStateManagerProvider.notifier)
         .onPointSelected(GamePointCoordinates(x: row, y: column));
   }
 
   void restart() {
-    ref.read(localGameStateManagerProvider("main").notifier).start();
+    ref.read(localGameStateManagerProvider.notifier).start();
   }
 }
 

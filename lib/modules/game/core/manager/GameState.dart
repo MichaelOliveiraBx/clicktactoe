@@ -16,6 +16,11 @@ sealed class GameState {
 
 class GameStateIdle extends GameState {
   GameStateIdle({super.table = const []});
+
+  @override
+  String toString() {
+    return 'GameStateIdle{table: $table}';
+  }
 }
 
 class GameStatePlaying extends GameState {
@@ -48,10 +53,10 @@ class GameStatePlaying extends GameState {
   }
 }
 
-class GameStateWinner extends GameState {
-  final GamePlayer playerWinner;
+class GameStateEnded extends GameState {
+  final GamePlayer? playerWinner;
 
-  GameStateWinner({required super.table, required this.playerWinner});
+  GameStateEnded({required super.table, this.playerWinner});
 
   @override
   String toString() {
