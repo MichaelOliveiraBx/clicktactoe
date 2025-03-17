@@ -7,7 +7,7 @@ part of 'LocalGameStateManager.dart';
 // **************************************************************************
 
 String _$localGameStateManagerHash() =>
-    r'9c491b5f0955084bfbc3a88615989fb59dbb617a';
+    r'ecf140cfd37bd565bab41c219ef8caafcb8e8a9b';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,8 +30,7 @@ class _SystemHash {
   }
 }
 
-abstract class _$LocalGameStateManager
-    extends BuildlessAutoDisposeNotifier<GameState> {
+abstract class _$LocalGameStateManager extends BuildlessNotifier<GameState> {
   late final String key;
 
   GameState build(String key);
@@ -75,7 +74,7 @@ class LocalGameStateManagerFamily extends Family<GameState> {
 
 /// See also [LocalGameStateManager].
 class LocalGameStateManagerProvider
-    extends AutoDisposeNotifierProviderImpl<LocalGameStateManager, GameState> {
+    extends NotifierProviderImpl<LocalGameStateManager, GameState> {
   /// See also [LocalGameStateManager].
   LocalGameStateManagerProvider(String key)
     : this._internal(
@@ -126,8 +125,7 @@ class LocalGameStateManagerProvider
   }
 
   @override
-  AutoDisposeNotifierProviderElement<LocalGameStateManager, GameState>
-  createElement() {
+  NotifierProviderElement<LocalGameStateManager, GameState> createElement() {
     return _LocalGameStateManagerProviderElement(this);
   }
 
@@ -147,13 +145,13 @@ class LocalGameStateManagerProvider
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin LocalGameStateManagerRef on AutoDisposeNotifierProviderRef<GameState> {
+mixin LocalGameStateManagerRef on NotifierProviderRef<GameState> {
   /// The parameter `key` of this provider.
   String get key;
 }
 
 class _LocalGameStateManagerProviderElement
-    extends AutoDisposeNotifierProviderElement<LocalGameStateManager, GameState>
+    extends NotifierProviderElement<LocalGameStateManager, GameState>
     with LocalGameStateManagerRef {
   _LocalGameStateManagerProviderElement(super.provider);
 

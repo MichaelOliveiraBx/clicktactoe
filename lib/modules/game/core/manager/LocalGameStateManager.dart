@@ -15,11 +15,10 @@ import 'dart:developer' as developer;
 
 part 'LocalGameStateManager.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class LocalGameStateManager extends _$LocalGameStateManager {
   final _player1Provider = localPlayerHandlerProvider("1");
   final _player2Provider = localPlayerHandlerProvider("2");
-  bool _isPlaying = false;
 
   CancelableOperation<void>? _playingTask;
 
@@ -42,24 +41,8 @@ class LocalGameStateManager extends _$LocalGameStateManager {
     // developer.log('BUILD winner:$winner', name: 'LocalGameStateManager');
 
     if (winner != null) {
-      developer.log(
-        'BUILD -- WINNNER -- _playingTask:$_playingTask $winner',
-        name: 'LocalGameStateManager',
-      );
       stop();
-      developer.log(
-        'BUILD -- WINNNER -- $winner',
-        name: 'LocalGameStateManager',
-      );
-      return GameStateIdle(
-        table:  playersPoints,
-      );
-      // return GameStatePlaying(
-      //   table: [],
-      //   playerTour: GamePlayer.player1,
-      //   playerWinnings: winner,
-      // );
-      return GameStateWinner(playerWinner: winner, table: []);
+      return GameStateWinner(playerWinner: winner, table: playersPoints);
     }
 
     developer.log('stateOrNull:$stateOrNull', name: 'LocalGameStateManager');
@@ -76,7 +59,6 @@ class LocalGameStateManager extends _$LocalGameStateManager {
   }
 
   void start() {
-    _isPlaying = true;
     state = GameStatePlaying.fromStart(GamePlayer.player1);
 
     final player1 = ref.read(_player1Provider.notifier);
@@ -90,27 +72,11 @@ class LocalGameStateManager extends _$LocalGameStateManager {
 
   @override
   void stop() {
-    Future.microtask(() {
-      developer.log(
-        'stop _isPlaying:$_isPlaying',
-        name: 'LocalGameStateManager',
-      );
-      _isPlaying = false;
+    ref.read(_player1Provider.notifier).stop();
+    ref.read(_player2Provider.notifier).stop();
 
-      developer.log(
-        'stop _isPlaying:$_isPlaying',
-        name: 'LocalGameStateManager',
-      );
-      ref.read(_player1Provider.notifier).stop();
-      ref.read(_player2Provider.notifier).stop();
-
-      developer.log(
-        'stop _isPlaying:$_isPlaying',
-        name: 'LocalGameStateManager',
-      );
-      _playingTask?.cancel();
-      _playingTask = null;
-    });
+    _playingTask?.cancel();
+    _playingTask = null;
   }
 
   _startMainLoop() {
@@ -119,26 +85,10 @@ class LocalGameStateManager extends _$LocalGameStateManager {
     }
     _playingTask = CancelableOperation.fromFuture(
       Future.microtask(() async {
-        while (_isPlaying) {
-          developer.log(
-            'Main loop PLAYER_1 _isPlaying:$_isPlaying',
-            name: 'LocalGameStateManager',
-          );
+        while (true) {
           state = state.updatePlayingPlayer(GamePlayer.player1);
-          developer.log(
-            'Main loop PLAYER_1 _isPlaying:$_isPlaying',
-            name: 'LocalGameStateManager',
-          );
           await ref.read(_player1Provider.notifier).handleMove();
 
-          if (_isPlaying == false) {
-            break;
-          }
-
-          developer.log(
-            'Main loop PLAYER_2 _isPlaying:$_isPlaying',
-            name: 'LocalGameStateManager',
-          );
           state = state.updatePlayingPlayer(GamePlayer.player2);
           await ref.read(_player2Provider.notifier).handleMove();
         }

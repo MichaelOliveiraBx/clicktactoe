@@ -20,6 +20,7 @@ class GameStateIdle extends GameState {
 
 class GameStatePlaying extends GameState {
   final GamePlayer playerTour;
+
   // final GamePlayer? playerWinnings;
 
   GameStatePlaying({
@@ -33,10 +34,7 @@ class GameStatePlaying extends GameState {
   }
 
   // copy with
-  GameStatePlaying copyWith({
-    List<GamePoint>? table,
-    GamePlayer? playerTour,
-  }) {
+  GameStatePlaying copyWith({List<GamePoint>? table, GamePlayer? playerTour}) {
     return GameStatePlaying(
       table: table ?? this.table,
       playerTour: playerTour ?? this.playerTour,
@@ -63,7 +61,10 @@ class GameStateWinner extends GameState {
 
 extension GameStateExtension on GameState {
   GameState updatePlayingPlayer(GamePlayer player) {
-    return GameStatePlaying(table: table, playerTour: player);
+    if (this is GameStatePlaying) {
+      return GameStatePlaying(table: table, playerTour: player);
+    }
+    return this;
   }
 }
 
