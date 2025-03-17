@@ -1,0 +1,1 @@
+enum GamePointStatus { none, win }
