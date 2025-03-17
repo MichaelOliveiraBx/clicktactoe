@@ -7,7 +7,7 @@ part of 'LocalGameStateManager.dart';
 // **************************************************************************
 
 String _$localGameStateManagerHash() =>
-    r'b0b8a962b1292d58b2c5ae0a3179f8cf144232e8';
+    r'385c8f43d25ae1c6a36cd539d3cec2c74cd7f696';
 
 /// See also [LocalGameStateManager].
 @ProviderFor(LocalGameStateManager)

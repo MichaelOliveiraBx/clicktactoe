@@ -7,7 +7,7 @@ part of 'GetGameTableUiState.dart';
 // **************************************************************************
 
 String _$getGameTableUiStateHash() =>
-    r'1e7a1ec0e2ae43c721ba918488f4dbcf02abcce5';
+    r'9d3e35df7c55bf14f3db7215a64f96c31c4c144b';
 
 /// Copied from Dart SDK
 class _SystemHash {

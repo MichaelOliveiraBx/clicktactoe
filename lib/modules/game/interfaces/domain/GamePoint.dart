@@ -1,5 +1,8 @@
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePlayer.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePointStatus.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'GamePoint.freezed.dart';
 
 class GamePointCoordinates {
   final int x;
@@ -13,19 +16,11 @@ class GamePointCoordinates {
   }
 }
 
-class GamePoint {
-  final GamePointStatus status;
-  final GamePlayer player;
-  final GamePointCoordinates coordinates;
-
-  GamePoint({
-    this.status = GamePointStatus.none,
-    required this.player,
-    required this.coordinates,
-  });
-
-  @override
-  String toString() {
-    return 'GamePoint{status: $status, player: $player, coordinates: $coordinates}';
-  }
+@freezed
+abstract class GamePoint with _$GamePoint {
+  const factory GamePoint({
+    @Default(GamePointStatus.none) GamePointStatus status,
+    required GamePlayer player,
+    required GamePointCoordinates coordinates,
+  }) = _GamePoint;
 }

@@ -1,4 +1,5 @@
-import 'package:clicktactoe/modules/game/core/manager/GameState.dart';
+import 'dart:developer' as developer;
+
 import 'package:clicktactoe/modules/game/core/manager/GameStateManager.dart';
 import 'package:clicktactoe/modules/game/core/manager/LocalGameStateManager.dart';
 import 'package:clicktactoe/modules/game/core/usecase/GetGameTableUiState.dart';
@@ -6,7 +7,6 @@ import 'package:clicktactoe/modules/game/interfaces/domain/GamePoint.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'dart:developer' as developer;
 
 part 'GameTableWidget.g.dart';
 
@@ -25,7 +25,7 @@ class GameTablePointUiState {
 }
 
 class GameTableUiState {
-  final List<List<GameTablePointType>> table;
+  final List<List<GameTablePointUiState>> table;
 
   GameTableUiState({required this.table});
 
@@ -111,14 +111,14 @@ class _GameTableWidgetState extends ConsumerState<GameTableWidget> {
     );
   }
 
-  Widget _buildPoint(GameTablePointType type) {
-    switch (type) {
+  Widget _buildPoint(GameTablePointUiState state) {
+    switch (state.type) {
       case GameTablePointType.empty:
         return Container();
       case GameTablePointType.cross:
-        return Icon(Icons.close);
+        return Icon(Icons.close, color: state.isWinning ? Colors.green : null);
       case GameTablePointType.circle:
-        return Icon(Icons.circle);
+        return Icon(Icons.circle, color: state.isWinning ? Colors.green : null);
     }
   }
 }

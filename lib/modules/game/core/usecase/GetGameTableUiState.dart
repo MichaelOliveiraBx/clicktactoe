@@ -9,17 +9,32 @@ part 'GetGameTableUiState.g.dart';
 
 @riverpod
 GameTableUiState getGameTableUiState(Ref ref, GameState gameState) {
-  final List<List<GameTablePointType>> points = [];
+  final List<List<GameTablePointUiState>> points = [];
   for (var column = 0; column < 3; column++) {
-    final List<GameTablePointType> rowPoints = [];
+    final List<GameTablePointUiState> rowPoints = [];
     for (var row = 0; row < 3; row++) {
       final point = gameState.table.getPointAt(row, column);
       if (point == null) {
-        rowPoints.add(GameTablePointType.empty);
+        rowPoints.add(
+          GameTablePointUiState(
+            isWinning: false,
+            type: GameTablePointType.empty,
+          ),
+        );
       } else if (point.player == GamePlayer.player1) {
-        rowPoints.add(GameTablePointType.cross);
+        rowPoints.add(
+          GameTablePointUiState(
+            isWinning: point.status == GamePointStatus.win,
+            type: GameTablePointType.cross,
+          ),
+        );
       } else {
-        rowPoints.add(GameTablePointType.circle);
+        rowPoints.add(
+          GameTablePointUiState(
+            isWinning: point.status == GamePointStatus.win,
+            type: GameTablePointType.circle,
+          ),
+        );
       }
     }
     points.add(rowPoints);

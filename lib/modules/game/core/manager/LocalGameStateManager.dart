@@ -33,7 +33,10 @@ class LocalGameStateManager extends _$LocalGameStateManager {
 
     if (winner != null || playersPoints.length == 9) {
       stop();
-      return GameStateEnded(playerWinner: winner, table: playersPoints);
+      return GameStateEnded(
+        playerWinner: winner?.playerWinner,
+        table: winner?.winnerPlayerPoints ?? playersPoints,
+      );
     }
 
     developer.log('stateOrNull:$stateOrNull', name: 'LocalGameStateManager');

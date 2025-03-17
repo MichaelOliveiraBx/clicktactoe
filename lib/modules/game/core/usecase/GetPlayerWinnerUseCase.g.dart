@@ -7,7 +7,7 @@ part of 'GetPlayerWinnerUseCase.dart';
 // **************************************************************************
 
 String _$getPlayerWinnerUseCaseHash() =>
-    r'fe509ca8ca31ae0e83c8da0d5be5b2022e1e5a58';
+    r'e5937436dcc7247cad8358f9cf3d61cd953804ff';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -35,7 +35,7 @@ class _SystemHash {
 const getPlayerWinnerUseCaseProvider = GetPlayerWinnerUseCaseFamily();
 
 /// See also [getPlayerWinnerUseCase].
-class GetPlayerWinnerUseCaseFamily extends Family<GamePlayer?> {
+class GetPlayerWinnerUseCaseFamily extends Family<WinnerData?> {
   /// See also [getPlayerWinnerUseCase].
   const GetPlayerWinnerUseCaseFamily();
 
@@ -70,7 +70,7 @@ class GetPlayerWinnerUseCaseFamily extends Family<GamePlayer?> {
 }
 
 /// See also [getPlayerWinnerUseCase].
-class GetPlayerWinnerUseCaseProvider extends AutoDisposeProvider<GamePlayer?> {
+class GetPlayerWinnerUseCaseProvider extends AutoDisposeProvider<WinnerData?> {
   /// See also [getPlayerWinnerUseCase].
   GetPlayerWinnerUseCaseProvider(
     List<GamePoint> player1Points,
@@ -110,7 +110,7 @@ class GetPlayerWinnerUseCaseProvider extends AutoDisposeProvider<GamePlayer?> {
 
   @override
   Override overrideWith(
-    GamePlayer? Function(GetPlayerWinnerUseCaseRef provider) create,
+    WinnerData? Function(GetPlayerWinnerUseCaseRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -128,7 +128,7 @@ class GetPlayerWinnerUseCaseProvider extends AutoDisposeProvider<GamePlayer?> {
   }
 
   @override
-  AutoDisposeProviderElement<GamePlayer?> createElement() {
+  AutoDisposeProviderElement<WinnerData?> createElement() {
     return _GetPlayerWinnerUseCaseProviderElement(this);
   }
 
@@ -151,7 +151,7 @@ class GetPlayerWinnerUseCaseProvider extends AutoDisposeProvider<GamePlayer?> {
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin GetPlayerWinnerUseCaseRef on AutoDisposeProviderRef<GamePlayer?> {
+mixin GetPlayerWinnerUseCaseRef on AutoDisposeProviderRef<WinnerData?> {
   /// The parameter `player1Points` of this provider.
   List<GamePoint> get player1Points;
 
@@ -160,7 +160,7 @@ mixin GetPlayerWinnerUseCaseRef on AutoDisposeProviderRef<GamePlayer?> {
 }
 
 class _GetPlayerWinnerUseCaseProviderElement
-    extends AutoDisposeProviderElement<GamePlayer?>
+    extends AutoDisposeProviderElement<WinnerData?>
     with GetPlayerWinnerUseCaseRef {
   _GetPlayerWinnerUseCaseProviderElement(super.provider);
 
