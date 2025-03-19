@@ -1,28 +1,41 @@
 import 'dart:async';
 import 'dart:developer' as developer;
 
-import 'package:async/async.dart';
 import 'package:cancellation_token/cancellation_token.dart';
 import 'package:clicktactoe/modules/game/core/manager/GameState.dart';
 import 'package:clicktactoe/modules/game/core/usecase/GetPlayerWinnerUseCase.dart';
+import 'package:clicktactoe/modules/game/interfaces/domain/GameConfiguration.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePlayer.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePoint.dart';
 import 'package:clicktactoe/modules/player/core/LocalPlayerHandler.dart';
 import 'package:clicktactoe/modules/player/core/ai/chatgpt/ChatGptAiPlayerProvider.dart';
 import 'package:clicktactoe/modules/player/interfaces/PlayerHandler.dart';
+import 'package:clicktactoe/modules/player/interfaces/PlayerType.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'LocalGameStateManager.g.dart';
 
+dynamic playerProvider(PlayerType type, GamePlayer player) {
+  switch (type) {
+    case PlayerTypeLocal():
+      return localPlayerHandlerProvider(player);
+    case PlayerTypeAI():
+      return chatGptAiPlayerProviderProvider(player);
+    case PlayerTypeRemote():
+      throw UnimplementedError();
+  }
+}
+
 @Riverpod()
 class LocalGameStateManager extends _$LocalGameStateManager {
-  final _player1Provider = localPlayerHandlerProvider("1");
-  final _player2Provider = chatGptAiPlayerProviderProvider;
+  GameConfiguration? _configuration;
 
   CancellationToken _playingCancellationToken = CancellationToken();
 
   @override
-  GameState build() {
+  GameState build(GameConfiguration configuration) {
+    _configuration = configuration;
+
     developer.log('BUILD', name: 'LocalGameStateManager');
 
     ref.onCancel(() {
@@ -68,6 +81,32 @@ class LocalGameStateManager extends _$LocalGameStateManager {
     return GameStateIdle();
   }
 
+  dynamic get _player1Provider {
+    final configuration = _configuration;
+    if (configuration == null) {
+      developer.log(
+        'Configuration is null',
+        name: 'LocalGameStateManager',
+        error: 'Configuration must not be null',
+      );
+      throw StateError('Configuration must not be null');
+    }
+    return playerProvider(configuration.player1Type, GamePlayer.player1);
+  }
+
+  dynamic get _player2Provider {
+    final configuration = _configuration;
+    if (configuration == null) {
+      developer.log(
+        'Configuration is null',
+        name: 'LocalGameStateManager',
+        error: 'Configuration must not be null',
+      );
+      throw StateError('Configuration must not be null');
+    }
+    return playerProvider(configuration.player2Type, GamePlayer.player2);
+  }
+
   void start() {
     _playingCancellationToken.cancel();
     _playingCancellationToken = CancellationToken();
@@ -89,42 +128,26 @@ class LocalGameStateManager extends _$LocalGameStateManager {
   // in the start function we call restart of player provider which rebuild
   // the notifier and we can't access to the ref at this time.
   _startMainLoop(
-    LocalPlayerHandler player1Notifier,
-    ChatGptAiPlayerProvider player2Notifier,
+    PlayerHandler player1Notifier,
+    PlayerHandler player2Notifier,
     CancellationToken cancellationToken,
-  ) {
+  ) async {
     Future.microtask(() async {
       while (!cancellationToken.isCancelled) {
-        developer.log('Playing task PLAYER 1', name: 'LocalGameStateManager');
         await _handlePlayerMove(player1Notifier, cancellationToken);
         if (cancellationToken.isCancelled) return;
-        developer.log('Playing task PLAYER 2', name: 'LocalGameStateManager');
         await _handlePlayerMove(player2Notifier, cancellationToken);
       }
-    }).asCancellable(cancellationToken);
+    }).asCancellableWithErrorHandling(cancellationToken);
   }
 
-  _handlePlayerMove(
+  Future<void> _handlePlayerMove(
     PlayerHandler playerNotifier,
     CancellationToken cancellationToken,
   ) async {
-    try {
-      await playerNotifier
-          .handleMove(state.table, cancellationToken)
-          .asCancellable(cancellationToken);
-    } on CancelledException {
-      developer.log(
-        'CancelledException in playing task for $playerNotifier',
-        name: 'LocalGameStateManager',
-      );
-    } catch (e, stackTrace) {
-      developer.log(
-        'Error in playing task:$e',
-        name: 'LocalGameStateManager',
-        error: e,
-        stackTrace: stackTrace,
-      );
-    }
+    return playerNotifier
+        .handleMove(state.table, cancellationToken)
+        .asCancellableWithErrorHandling(cancellationToken);
   }
 
   List<GamePoint> _handlePlayerPoint(
@@ -159,5 +182,24 @@ class LocalGameStateManager extends _$LocalGameStateManager {
               );
       }
     }
+  }
+}
+
+extension FutureCanceledExtension on Future<void> {
+  Future<void> asCancellableWithErrorHandling(
+    CancellationToken cancellationToken,
+  ) {
+    return asCancellable(cancellationToken).catchError((e, stackTrace) {
+      if (e is CancelledException) {
+        developer.log('isCancelled', name: 'LocalGameStateManager');
+        return;
+      }
+      developer.log(
+        'Error: $e',
+        name: 'LocalGameStateManager',
+        error: e,
+        stackTrace: stackTrace,
+      );
+    });
   }
 }

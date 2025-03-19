@@ -1,7 +1,7 @@
 import 'package:clicktactoe/modules/game/core/manager/GameState.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePlayer.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePointStatus.dart';
-import 'package:clicktactoe/modules/game/ui/GameTableWidget.dart';
+import 'package:clicktactoe/modules/game/ui/table/GameTableUiState.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

@@ -79,7 +79,7 @@ as int,
 
 class _GamePointCoordinates implements GamePointCoordinates {
   const _GamePointCoordinates({required this.x, required this.y});
-
+  
 
 @override final  int x;
 @override final  int y;
@@ -206,7 +206,7 @@ as GamePointCoordinates,
 @override
 @pragma('vm:prefer-inline')
 $GamePointCoordinatesCopyWith<$Res> get coordinates {
-
+  
   return $GamePointCoordinatesCopyWith<$Res>(_self.coordinates, (value) {
     return _then(_self.copyWith(coordinates: value));
   });
@@ -219,7 +219,7 @@ $GamePointCoordinatesCopyWith<$Res> get coordinates {
 
 class _GamePoint implements GamePoint {
   const _GamePoint({this.status = GamePointStatus.none, required this.player, required this.coordinates});
-
+  
 
 @override@JsonKey() final  GamePointStatus status;
 @override final  GamePlayer player;
@@ -286,7 +286,7 @@ as GamePointCoordinates,
 @override
 @pragma('vm:prefer-inline')
 $GamePointCoordinatesCopyWith<$Res> get coordinates {
-
+  
   return $GamePointCoordinatesCopyWith<$Res>(_self.coordinates, (value) {
     return _then(_self.copyWith(coordinates: value));
   });

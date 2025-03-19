@@ -1,15 +1,12 @@
-sealed class PlayerType {
-  const PlayerType();
-}
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class PlayerTypeLocal extends PlayerType {
-  const PlayerTypeLocal();
-}
+part 'PlayerType.freezed.dart';
 
-class PlayerTypeAI extends PlayerType {}
+@freezed
+sealed class PlayerType with _$PlayerType {
+  const factory PlayerType.local() = PlayerTypeLocal;
 
-class PlayerTypeRemote extends PlayerType {
-  final String roomId;
+  const factory PlayerType.ai() = PlayerTypeAI;
 
-  PlayerTypeRemote({required this.roomId});
+  const factory PlayerType.remote({required String roomId}) = PlayerTypeRemote;
 }

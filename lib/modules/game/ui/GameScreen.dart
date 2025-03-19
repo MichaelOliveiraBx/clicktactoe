@@ -1,14 +1,14 @@
+import 'dart:developer' as developer;
+
 import 'package:clicktactoe/modules/game/core/manager/GameState.dart';
-import 'package:clicktactoe/modules/game/core/manager/GameStateManager.dart';
 import 'package:clicktactoe/modules/game/core/manager/LocalGameStateManager.dart';
+import 'package:clicktactoe/modules/game/interfaces/domain/GameConfiguration.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePlayer.dart';
-import 'package:clicktactoe/modules/game/ui/GameTableWidget.dart';
+import 'package:clicktactoe/modules/game/ui/table/GameTableWidget.dart';
 import 'package:clicktactoe/modules/player/interfaces/PlayerType.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import 'dart:developer' as developer;
 
 part 'GameScreen.g.dart';
 
@@ -21,9 +21,12 @@ class GameScreenUiState {
 @Riverpod()
 class GameScreenUiStateNotifier extends _$GameScreenUiStateNotifier {
   @override
-  GameScreenUiState build() {
-    final gameState = ref.watch(localGameStateManagerProvider);
-    developer.log('BUILD gameState:$gameState', name: 'GameScreenUiStateNotifier');
+  GameScreenUiState build(GameConfiguration configuration) {
+    final gameState = ref.watch(localGameStateManagerProvider(configuration));
+    developer.log(
+      'BUILD gameState:$gameState',
+      name: 'GameScreenUiStateNotifier',
+    );
     final message = switch (gameState) {
       GameStateIdle() => 'Ready',
       GameStatePlaying() => switch (gameState.playerTour) {
@@ -38,19 +41,18 @@ class GameScreenUiStateNotifier extends _$GameScreenUiStateNotifier {
 }
 
 class GameScreen extends ConsumerWidget {
-  final GameStateManagerConfiguration configuration;
+  final GameConfiguration configuration = const GameConfiguration(
+    player1Type: PlayerTypeLocal(),
+    player2Type: PlayerTypeAI(),
+  );
 
   const GameScreen({
     super.key,
-    this.configuration = const GameStateManagerConfiguration(
-      player1Configuration: PlayerTypeLocal(),
-      player2Configuration: PlayerTypeLocal(),
-    ),
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(gameScreenUiStateNotifierProvider);
+    final state = ref.watch(gameScreenUiStateNotifierProvider(configuration));
     return Scaffold(
       body: Stack(
         children: [

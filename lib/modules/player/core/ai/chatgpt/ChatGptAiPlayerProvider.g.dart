@@ -149,7 +149,7 @@ class _GetChatGptNextPointProviderElement
   List<GamePoint> get table => (origin as GetChatGptNextPointProvider).table;
 }
 
-String _$getChatGptClientHash() => r'cde140bcc409dd05cb21927af6745d10ae43714e';
+String _$getChatGptClientHash() => r'62452596a63948ab6ec3e061c954696733ef18cc';
 
 /// See also [getChatGptClient].
 @ProviderFor(getChatGptClient)
@@ -289,22 +289,141 @@ class _HandleCallGptProviderElement
 }
 
 String _$chatGptAiPlayerProviderHash() =>
-    r'fb01120ff691ff3de2f0a15b2cc6c263e4030fd6';
+    r'858b4fa16e08f0f7db4aed9eb56873a90a9b4cf9';
+
+abstract class _$ChatGptAiPlayerProvider
+    extends BuildlessAutoDisposeNotifier<PlayerState> {
+  late final GamePlayer player;
+
+  PlayerState build(GamePlayer player);
+}
 
 /// See also [ChatGptAiPlayerProvider].
 @ProviderFor(ChatGptAiPlayerProvider)
-final chatGptAiPlayerProviderProvider =
-    AutoDisposeNotifierProvider<ChatGptAiPlayerProvider, PlayerState>.internal(
-      ChatGptAiPlayerProvider.new,
-      name: r'chatGptAiPlayerProviderProvider',
-      debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product')
-              ? null
-              : _$chatGptAiPlayerProviderHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+const chatGptAiPlayerProviderProvider = ChatGptAiPlayerProviderFamily();
 
-typedef _$ChatGptAiPlayerProvider = AutoDisposeNotifier<PlayerState>;
+/// See also [ChatGptAiPlayerProvider].
+class ChatGptAiPlayerProviderFamily extends Family<PlayerState> {
+  /// See also [ChatGptAiPlayerProvider].
+  const ChatGptAiPlayerProviderFamily();
+
+  /// See also [ChatGptAiPlayerProvider].
+  ChatGptAiPlayerProviderProvider call(GamePlayer player) {
+    return ChatGptAiPlayerProviderProvider(player);
+  }
+
+  @override
+  ChatGptAiPlayerProviderProvider getProviderOverride(
+    covariant ChatGptAiPlayerProviderProvider provider,
+  ) {
+    return call(provider.player);
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'chatGptAiPlayerProviderProvider';
+}
+
+/// See also [ChatGptAiPlayerProvider].
+class ChatGptAiPlayerProviderProvider
+    extends
+        AutoDisposeNotifierProviderImpl<ChatGptAiPlayerProvider, PlayerState> {
+  /// See also [ChatGptAiPlayerProvider].
+  ChatGptAiPlayerProviderProvider(GamePlayer player)
+    : this._internal(
+        () => ChatGptAiPlayerProvider()..player = player,
+        from: chatGptAiPlayerProviderProvider,
+        name: r'chatGptAiPlayerProviderProvider',
+        debugGetCreateSourceHash:
+            const bool.fromEnvironment('dart.vm.product')
+                ? null
+                : _$chatGptAiPlayerProviderHash,
+        dependencies: ChatGptAiPlayerProviderFamily._dependencies,
+        allTransitiveDependencies:
+            ChatGptAiPlayerProviderFamily._allTransitiveDependencies,
+        player: player,
+      );
+
+  ChatGptAiPlayerProviderProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.player,
+  }) : super.internal();
+
+  final GamePlayer player;
+
+  @override
+  PlayerState runNotifierBuild(covariant ChatGptAiPlayerProvider notifier) {
+    return notifier.build(player);
+  }
+
+  @override
+  Override overrideWith(ChatGptAiPlayerProvider Function() create) {
+    return ProviderOverride(
+      origin: this,
+      override: ChatGptAiPlayerProviderProvider._internal(
+        () => create()..player = player,
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        player: player,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeNotifierProviderElement<ChatGptAiPlayerProvider, PlayerState>
+  createElement() {
+    return _ChatGptAiPlayerProviderProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ChatGptAiPlayerProviderProvider && other.player == player;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, player.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin ChatGptAiPlayerProviderRef
+    on AutoDisposeNotifierProviderRef<PlayerState> {
+  /// The parameter `player` of this provider.
+  GamePlayer get player;
+}
+
+class _ChatGptAiPlayerProviderProviderElement
+    extends
+        AutoDisposeNotifierProviderElement<ChatGptAiPlayerProvider, PlayerState>
+    with ChatGptAiPlayerProviderRef {
+  _ChatGptAiPlayerProviderProviderElement(super.provider);
+
+  @override
+  GamePlayer get player => (origin as ChatGptAiPlayerProviderProvider).player;
+}
+
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

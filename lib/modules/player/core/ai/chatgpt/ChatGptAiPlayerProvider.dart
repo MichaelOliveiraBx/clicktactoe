@@ -14,9 +14,9 @@ part 'ChatGptAiPlayerProvider.g.dart';
 
 @riverpod
 class ChatGptAiPlayerProvider extends _$ChatGptAiPlayerProvider
-    implements PlayerHandler {
+    implements PlayerHandler, PlayerStateHandler {
   @override
-  PlayerState build() {
+  PlayerState build(GamePlayer player) {
     return PlayerState();
   }
 

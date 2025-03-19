@@ -7,7 +7,7 @@ part of 'LocalPlayerHandler.dart';
 // **************************************************************************
 
 String _$localPlayerHandlerHash() =>
-    r'be96bc3f387d56817fbc4bf3436af6b2f5e52eb6';
+    r'817dfa024dcae02f6abf7c742cb6389c907c6bd4';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -32,9 +32,9 @@ class _SystemHash {
 
 abstract class _$LocalPlayerHandler
     extends BuildlessAutoDisposeNotifier<PlayerState> {
-  late final String key;
+  late final GamePlayer player;
 
-  PlayerState build(String key);
+  PlayerState build(GamePlayer player);
 }
 
 /// See also [LocalPlayerHandler].
@@ -47,15 +47,15 @@ class LocalPlayerHandlerFamily extends Family<PlayerState> {
   const LocalPlayerHandlerFamily();
 
   /// See also [LocalPlayerHandler].
-  LocalPlayerHandlerProvider call(String key) {
-    return LocalPlayerHandlerProvider(key);
+  LocalPlayerHandlerProvider call(GamePlayer player) {
+    return LocalPlayerHandlerProvider(player);
   }
 
   @override
   LocalPlayerHandlerProvider getProviderOverride(
     covariant LocalPlayerHandlerProvider provider,
   ) {
-    return call(provider.key);
+    return call(provider.player);
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -77,9 +77,9 @@ class LocalPlayerHandlerFamily extends Family<PlayerState> {
 class LocalPlayerHandlerProvider
     extends AutoDisposeNotifierProviderImpl<LocalPlayerHandler, PlayerState> {
   /// See also [LocalPlayerHandler].
-  LocalPlayerHandlerProvider(String key)
+  LocalPlayerHandlerProvider(GamePlayer player)
     : this._internal(
-        () => LocalPlayerHandler()..key = key,
+        () => LocalPlayerHandler()..player = player,
         from: localPlayerHandlerProvider,
         name: r'localPlayerHandlerProvider',
         debugGetCreateSourceHash:
@@ -89,7 +89,7 @@ class LocalPlayerHandlerProvider
         dependencies: LocalPlayerHandlerFamily._dependencies,
         allTransitiveDependencies:
             LocalPlayerHandlerFamily._allTransitiveDependencies,
-        key: key,
+        player: player,
       );
 
   LocalPlayerHandlerProvider._internal(
@@ -99,14 +99,14 @@ class LocalPlayerHandlerProvider
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.key,
+    required this.player,
   }) : super.internal();
 
-  final String key;
+  final GamePlayer player;
 
   @override
   PlayerState runNotifierBuild(covariant LocalPlayerHandler notifier) {
-    return notifier.build(key);
+    return notifier.build(player);
   }
 
   @override
@@ -114,13 +114,13 @@ class LocalPlayerHandlerProvider
     return ProviderOverride(
       origin: this,
       override: LocalPlayerHandlerProvider._internal(
-        () => create()..key = key,
+        () => create()..player = player,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        key: key,
+        player: player,
       ),
     );
   }
@@ -133,13 +133,13 @@ class LocalPlayerHandlerProvider
 
   @override
   bool operator ==(Object other) {
-    return other is LocalPlayerHandlerProvider && other.key == key;
+    return other is LocalPlayerHandlerProvider && other.player == player;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, key.hashCode);
+    hash = _SystemHash.combine(hash, player.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -148,8 +148,8 @@ class LocalPlayerHandlerProvider
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 mixin LocalPlayerHandlerRef on AutoDisposeNotifierProviderRef<PlayerState> {
-  /// The parameter `key` of this provider.
-  String get key;
+  /// The parameter `player` of this provider.
+  GamePlayer get player;
 }
 
 class _LocalPlayerHandlerProviderElement
@@ -158,7 +158,7 @@ class _LocalPlayerHandlerProviderElement
   _LocalPlayerHandlerProviderElement(super.provider);
 
   @override
-  String get key => (origin as LocalPlayerHandlerProvider).key;
+  GamePlayer get player => (origin as LocalPlayerHandlerProvider).player;
 }
 
 // ignore_for_file: type=lint

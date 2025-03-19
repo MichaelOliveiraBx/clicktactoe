@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'LocalGameStateManager.dart';
+part of 'GameTableUiStateNotifier.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$localGameStateManagerHash() =>
-    r'd8cac92aefe6e3e063ad624e48c83aad9b4abde6';
+String _$gameTableUiStateNotifierHash() =>
+    r'2bdf0e2fee40bcc32608b4b1cd23b0a4ba90bfcc';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,30 +30,30 @@ class _SystemHash {
   }
 }
 
-abstract class _$LocalGameStateManager
-    extends BuildlessAutoDisposeNotifier<GameState> {
+abstract class _$GameTableUiStateNotifier
+    extends BuildlessAutoDisposeNotifier<GameTableUiState> {
   late final GameConfiguration configuration;
 
-  GameState build(GameConfiguration configuration);
+  GameTableUiState build(GameConfiguration configuration);
 }
 
-/// See also [LocalGameStateManager].
-@ProviderFor(LocalGameStateManager)
-const localGameStateManagerProvider = LocalGameStateManagerFamily();
+/// See also [GameTableUiStateNotifier].
+@ProviderFor(GameTableUiStateNotifier)
+const gameTableUiStateNotifierProvider = GameTableUiStateNotifierFamily();
 
-/// See also [LocalGameStateManager].
-class LocalGameStateManagerFamily extends Family<GameState> {
-  /// See also [LocalGameStateManager].
-  const LocalGameStateManagerFamily();
+/// See also [GameTableUiStateNotifier].
+class GameTableUiStateNotifierFamily extends Family<GameTableUiState> {
+  /// See also [GameTableUiStateNotifier].
+  const GameTableUiStateNotifierFamily();
 
-  /// See also [LocalGameStateManager].
-  LocalGameStateManagerProvider call(GameConfiguration configuration) {
-    return LocalGameStateManagerProvider(configuration);
+  /// See also [GameTableUiStateNotifier].
+  GameTableUiStateNotifierProvider call(GameConfiguration configuration) {
+    return GameTableUiStateNotifierProvider(configuration);
   }
 
   @override
-  LocalGameStateManagerProvider getProviderOverride(
-    covariant LocalGameStateManagerProvider provider,
+  GameTableUiStateNotifierProvider getProviderOverride(
+    covariant GameTableUiStateNotifierProvider provider,
   ) {
     return call(provider.configuration);
   }
@@ -70,29 +70,33 @@ class LocalGameStateManagerFamily extends Family<GameState> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'localGameStateManagerProvider';
+  String? get name => r'gameTableUiStateNotifierProvider';
 }
 
-/// See also [LocalGameStateManager].
-class LocalGameStateManagerProvider
-    extends AutoDisposeNotifierProviderImpl<LocalGameStateManager, GameState> {
-  /// See also [LocalGameStateManager].
-  LocalGameStateManagerProvider(GameConfiguration configuration)
+/// See also [GameTableUiStateNotifier].
+class GameTableUiStateNotifierProvider
+    extends
+        AutoDisposeNotifierProviderImpl<
+          GameTableUiStateNotifier,
+          GameTableUiState
+        > {
+  /// See also [GameTableUiStateNotifier].
+  GameTableUiStateNotifierProvider(GameConfiguration configuration)
     : this._internal(
-        () => LocalGameStateManager()..configuration = configuration,
-        from: localGameStateManagerProvider,
-        name: r'localGameStateManagerProvider',
+        () => GameTableUiStateNotifier()..configuration = configuration,
+        from: gameTableUiStateNotifierProvider,
+        name: r'gameTableUiStateNotifierProvider',
         debugGetCreateSourceHash:
             const bool.fromEnvironment('dart.vm.product')
                 ? null
-                : _$localGameStateManagerHash,
-        dependencies: LocalGameStateManagerFamily._dependencies,
+                : _$gameTableUiStateNotifierHash,
+        dependencies: GameTableUiStateNotifierFamily._dependencies,
         allTransitiveDependencies:
-            LocalGameStateManagerFamily._allTransitiveDependencies,
+            GameTableUiStateNotifierFamily._allTransitiveDependencies,
         configuration: configuration,
       );
 
-  LocalGameStateManagerProvider._internal(
+  GameTableUiStateNotifierProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -105,15 +109,17 @@ class LocalGameStateManagerProvider
   final GameConfiguration configuration;
 
   @override
-  GameState runNotifierBuild(covariant LocalGameStateManager notifier) {
+  GameTableUiState runNotifierBuild(
+    covariant GameTableUiStateNotifier notifier,
+  ) {
     return notifier.build(configuration);
   }
 
   @override
-  Override overrideWith(LocalGameStateManager Function() create) {
+  Override overrideWith(GameTableUiStateNotifier Function() create) {
     return ProviderOverride(
       origin: this,
-      override: LocalGameStateManagerProvider._internal(
+      override: GameTableUiStateNotifierProvider._internal(
         () => create()..configuration = configuration,
         from: from,
         name: null,
@@ -126,14 +132,14 @@ class LocalGameStateManagerProvider
   }
 
   @override
-  AutoDisposeNotifierProviderElement<LocalGameStateManager, GameState>
+  AutoDisposeNotifierProviderElement<GameTableUiStateNotifier, GameTableUiState>
   createElement() {
-    return _LocalGameStateManagerProviderElement(this);
+    return _GameTableUiStateNotifierProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is LocalGameStateManagerProvider &&
+    return other is GameTableUiStateNotifierProvider &&
         other.configuration == configuration;
   }
 
@@ -148,19 +154,24 @@ class LocalGameStateManagerProvider
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin LocalGameStateManagerRef on AutoDisposeNotifierProviderRef<GameState> {
+mixin GameTableUiStateNotifierRef
+    on AutoDisposeNotifierProviderRef<GameTableUiState> {
   /// The parameter `configuration` of this provider.
   GameConfiguration get configuration;
 }
 
-class _LocalGameStateManagerProviderElement
-    extends AutoDisposeNotifierProviderElement<LocalGameStateManager, GameState>
-    with LocalGameStateManagerRef {
-  _LocalGameStateManagerProviderElement(super.provider);
+class _GameTableUiStateNotifierProviderElement
+    extends
+        AutoDisposeNotifierProviderElement<
+          GameTableUiStateNotifier,
+          GameTableUiState
+        >
+    with GameTableUiStateNotifierRef {
+  _GameTableUiStateNotifierProviderElement(super.provider);
 
   @override
   GameConfiguration get configuration =>
-      (origin as LocalGameStateManagerProvider).configuration;
+      (origin as GameTableUiStateNotifierProvider).configuration;
 }
 
 // ignore_for_file: type=lint

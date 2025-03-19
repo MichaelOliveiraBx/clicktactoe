@@ -3,6 +3,7 @@ import 'dart:developer' as developer;
 
 import 'package:async/async.dart';
 import 'package:cancellation_token/cancellation_token.dart';
+import 'package:clicktactoe/modules/game/interfaces/domain/GamePlayer.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePoint.dart';
 import 'package:clicktactoe/modules/player/interfaces/PlayerHandler.dart';
 import 'package:clicktactoe/modules/player/interfaces/PlayerState.dart';
@@ -12,12 +13,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'LocalPlayerHandler.g.dart';
 
 @riverpod
-class LocalPlayerHandler extends _$LocalPlayerHandler implements PlayerHandler {
+class LocalPlayerHandler extends _$LocalPlayerHandler implements PlayerHandler, PlayerStateHandler {
   Completer<void>? _currentMoveFuture;
-  CancelableOperation<void>? _currentMoveCancelableOperation;
 
   @override
-  PlayerState build(String key) {
+  PlayerState build(GamePlayer player) {
     return PlayerState();
   }
 
