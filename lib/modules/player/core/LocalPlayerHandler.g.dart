@@ -7,7 +7,7 @@ part of 'LocalPlayerHandler.dart';
 // **************************************************************************
 
 String _$localPlayerHandlerHash() =>
-    r'c6c2b0ef3ac073e4b4d6c0cda2ef2c1597e7ed1e';
+    r'be96bc3f387d56817fbc4bf3436af6b2f5e52eb6';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,10 +31,10 @@ class _SystemHash {
 }
 
 abstract class _$LocalPlayerHandler
-    extends BuildlessAutoDisposeNotifier<List<GamePoint>> {
+    extends BuildlessAutoDisposeNotifier<PlayerState> {
   late final String key;
 
-  List<GamePoint> build(String key);
+  PlayerState build(String key);
 }
 
 /// See also [LocalPlayerHandler].
@@ -42,7 +42,7 @@ abstract class _$LocalPlayerHandler
 const localPlayerHandlerProvider = LocalPlayerHandlerFamily();
 
 /// See also [LocalPlayerHandler].
-class LocalPlayerHandlerFamily extends Family<List<GamePoint>> {
+class LocalPlayerHandlerFamily extends Family<PlayerState> {
   /// See also [LocalPlayerHandler].
   const LocalPlayerHandlerFamily();
 
@@ -75,8 +75,7 @@ class LocalPlayerHandlerFamily extends Family<List<GamePoint>> {
 
 /// See also [LocalPlayerHandler].
 class LocalPlayerHandlerProvider
-    extends
-        AutoDisposeNotifierProviderImpl<LocalPlayerHandler, List<GamePoint>> {
+    extends AutoDisposeNotifierProviderImpl<LocalPlayerHandler, PlayerState> {
   /// See also [LocalPlayerHandler].
   LocalPlayerHandlerProvider(String key)
     : this._internal(
@@ -106,7 +105,7 @@ class LocalPlayerHandlerProvider
   final String key;
 
   @override
-  List<GamePoint> runNotifierBuild(covariant LocalPlayerHandler notifier) {
+  PlayerState runNotifierBuild(covariant LocalPlayerHandler notifier) {
     return notifier.build(key);
   }
 
@@ -127,7 +126,7 @@ class LocalPlayerHandlerProvider
   }
 
   @override
-  AutoDisposeNotifierProviderElement<LocalPlayerHandler, List<GamePoint>>
+  AutoDisposeNotifierProviderElement<LocalPlayerHandler, PlayerState>
   createElement() {
     return _LocalPlayerHandlerProviderElement(this);
   }
@@ -148,14 +147,13 @@ class LocalPlayerHandlerProvider
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin LocalPlayerHandlerRef on AutoDisposeNotifierProviderRef<List<GamePoint>> {
+mixin LocalPlayerHandlerRef on AutoDisposeNotifierProviderRef<PlayerState> {
   /// The parameter `key` of this provider.
   String get key;
 }
 
 class _LocalPlayerHandlerProviderElement
-    extends
-        AutoDisposeNotifierProviderElement<LocalPlayerHandler, List<GamePoint>>
+    extends AutoDisposeNotifierProviderElement<LocalPlayerHandler, PlayerState>
     with LocalPlayerHandlerRef {
   _LocalPlayerHandlerProviderElement(super.provider);
 

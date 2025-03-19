@@ -41,10 +41,10 @@ class GameTableUiStateNotifier extends _$GameTableUiStateNotifier {
   GameTableUiState build() {
     final gameState = ref.watch(localGameStateManagerProvider);
     final gameUiState = ref.read(getGameTableUiStateProvider(gameState));
-    developer.log(
-      'BUILD gameState:$gameState gameUiState:$gameUiState',
-      name: 'GameTableUiStateNotifier',
-    );
+    // developer.log(
+    //   'BUILD gameState:$gameState gameUiState:$gameUiState',
+    //   name: 'GameTableUiStateNotifier',
+    // );
 
     return gameUiState;
   }

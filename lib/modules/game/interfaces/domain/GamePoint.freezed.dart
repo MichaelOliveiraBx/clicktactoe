@@ -13,6 +13,136 @@ part of 'GamePoint.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
+mixin _$GamePointCoordinates {
+
+ int get x; int get y;
+/// Create a copy of GamePointCoordinates
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$GamePointCoordinatesCopyWith<GamePointCoordinates> get copyWith => _$GamePointCoordinatesCopyWithImpl<GamePointCoordinates>(this as GamePointCoordinates, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GamePointCoordinates&&(identical(other.x, x) || other.x == x)&&(identical(other.y, y) || other.y == y));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,x,y);
+
+@override
+String toString() {
+  return 'GamePointCoordinates(x: $x, y: $y)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $GamePointCoordinatesCopyWith<$Res>  {
+  factory $GamePointCoordinatesCopyWith(GamePointCoordinates value, $Res Function(GamePointCoordinates) _then) = _$GamePointCoordinatesCopyWithImpl;
+@useResult
+$Res call({
+ int x, int y
+});
+
+
+
+
+}
+/// @nodoc
+class _$GamePointCoordinatesCopyWithImpl<$Res>
+    implements $GamePointCoordinatesCopyWith<$Res> {
+  _$GamePointCoordinatesCopyWithImpl(this._self, this._then);
+
+  final GamePointCoordinates _self;
+  final $Res Function(GamePointCoordinates) _then;
+
+/// Create a copy of GamePointCoordinates
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? x = null,Object? y = null,}) {
+  return _then(_self.copyWith(
+x: null == x ? _self.x : x // ignore: cast_nullable_to_non_nullable
+as int,y: null == y ? _self.y : y // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+}
+
+
+/// @nodoc
+
+
+class _GamePointCoordinates implements GamePointCoordinates {
+  const _GamePointCoordinates({required this.x, required this.y});
+
+
+@override final  int x;
+@override final  int y;
+
+/// Create a copy of GamePointCoordinates
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$GamePointCoordinatesCopyWith<_GamePointCoordinates> get copyWith => __$GamePointCoordinatesCopyWithImpl<_GamePointCoordinates>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GamePointCoordinates&&(identical(other.x, x) || other.x == x)&&(identical(other.y, y) || other.y == y));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,x,y);
+
+@override
+String toString() {
+  return 'GamePointCoordinates(x: $x, y: $y)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$GamePointCoordinatesCopyWith<$Res> implements $GamePointCoordinatesCopyWith<$Res> {
+  factory _$GamePointCoordinatesCopyWith(_GamePointCoordinates value, $Res Function(_GamePointCoordinates) _then) = __$GamePointCoordinatesCopyWithImpl;
+@override @useResult
+$Res call({
+ int x, int y
+});
+
+
+
+
+}
+/// @nodoc
+class __$GamePointCoordinatesCopyWithImpl<$Res>
+    implements _$GamePointCoordinatesCopyWith<$Res> {
+  __$GamePointCoordinatesCopyWithImpl(this._self, this._then);
+
+  final _GamePointCoordinates _self;
+  final $Res Function(_GamePointCoordinates) _then;
+
+/// Create a copy of GamePointCoordinates
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? x = null,Object? y = null,}) {
+  return _then(_GamePointCoordinates(
+x: null == x ? _self.x : x // ignore: cast_nullable_to_non_nullable
+as int,y: null == y ? _self.y : y // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+
+}
+
+/// @nodoc
 mixin _$GamePoint {
 
  GamePointStatus get status; GamePlayer get player; GamePointCoordinates get coordinates;
@@ -50,7 +180,7 @@ $Res call({
 });
 
 
-
+$GamePointCoordinatesCopyWith<$Res> get coordinates;
 
 }
 /// @nodoc
@@ -71,7 +201,16 @@ as GamePlayer,coordinates: null == coordinates ? _self.coordinates : coordinates
 as GamePointCoordinates,
   ));
 }
+/// Create a copy of GamePoint
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$GamePointCoordinatesCopyWith<$Res> get coordinates {
 
+  return $GamePointCoordinatesCopyWith<$Res>(_self.coordinates, (value) {
+    return _then(_self.copyWith(coordinates: value));
+  });
+}
 }
 
 
@@ -80,7 +219,7 @@ as GamePointCoordinates,
 
 class _GamePoint implements GamePoint {
   const _GamePoint({this.status = GamePointStatus.none, required this.player, required this.coordinates});
-  
+
 
 @override@JsonKey() final  GamePointStatus status;
 @override final  GamePlayer player;
@@ -120,7 +259,7 @@ $Res call({
 });
 
 
-
+@override $GamePointCoordinatesCopyWith<$Res> get coordinates;
 
 }
 /// @nodoc
@@ -142,7 +281,16 @@ as GamePointCoordinates,
   ));
 }
 
+/// Create a copy of GamePoint
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$GamePointCoordinatesCopyWith<$Res> get coordinates {
 
+  return $GamePointCoordinatesCopyWith<$Res>(_self.coordinates, (value) {
+    return _then(_self.copyWith(coordinates: value));
+  });
+}
 }
 
 // dart format on

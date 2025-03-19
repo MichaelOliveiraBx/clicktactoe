@@ -7,7 +7,7 @@ part of 'GameTableWidget.dart';
 // **************************************************************************
 
 String _$gameTableUiStateNotifierHash() =>
-    r'95a9dfe9ba4fd25b7f18bd40c0b2160e65d97f46';
+    r'ee1ba664503c5deb175f3d020739db4ef6227b78';
 
 /// See also [GameTableUiStateNotifier].
 @ProviderFor(GameTableUiStateNotifier)

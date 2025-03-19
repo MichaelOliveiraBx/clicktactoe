@@ -4,16 +4,12 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'GamePoint.freezed.dart';
 
-class GamePointCoordinates {
-  final int x;
-  final int y;
-
-  GamePointCoordinates({required this.x, required this.y});
-
-  @override
-  String toString() {
-    return 'GamePointCoordinates{x: $x, y: $y}';
-  }
+@freezed
+abstract class GamePointCoordinates with _$GamePointCoordinates {
+  const factory GamePointCoordinates({
+    required int x,
+    required int y,
+  }) = _GamePointCoordinates;
 }
 
 @freezed
