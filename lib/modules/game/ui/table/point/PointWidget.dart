@@ -13,7 +13,7 @@ class PointWidget extends StatefulWidget {
   });
 
   @override
-  _PointWidgetState createState() => _PointWidgetState();
+  State<PointWidget> createState() => _PointWidgetState();
 }
 
 class _PointWidgetState extends State<PointWidget>
@@ -25,7 +25,7 @@ class _PointWidgetState extends State<PointWidget>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 300),
     );
     _animationController?.forward();
     _animationController?.addListener(() {
@@ -129,7 +129,7 @@ class CircleCrossPainter extends CustomPainter {
     final animateValue2 = ((animateValue - 0.5) * 2).clamp(0, 1);
     canvas.drawLine(
       Offset(0, size.height),
-      Offset(size.width * animateValue2, 0),
+      Offset(size.width * animateValue2, size.height - size.height * animateValue2),
       paint,
     );
   }

@@ -7,7 +7,7 @@ part of 'ClickTacToeOnboardingConfiguration.dart';
 // **************************************************************************
 
 String _$getClickTacToeOnboardingConfigurationHash() =>
-    r'0bf31d0f1b5275f13e73106b26a2d28e4fb950a7';
+    r'6a4f75ea4e607e6c6f852a466756036adae37d4f';
 
 /// See also [getClickTacToeOnboardingConfiguration].
 @ProviderFor(getClickTacToeOnboardingConfiguration)

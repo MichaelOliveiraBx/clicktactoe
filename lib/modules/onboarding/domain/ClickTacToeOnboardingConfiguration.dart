@@ -1,3 +1,5 @@
+import 'package:clicktactoe/modules/game/interfaces/domain/GameConfiguration.dart';
+import 'package:clicktactoe/modules/player/interfaces/PlayerType.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -29,11 +31,21 @@ OnboardingConfiguration getClickTacToeOnboardingConfiguration(Ref ref) {
       buttons: [
         OnboardingButtonConfiguration(
           type: OnboardingButtonType.local2players,
-          action: OnboardingButtonAction.none(),
+          action: OnboardingButtonAction.startGame(
+            configuration: GameConfiguration(
+              player1Type: PlayerType.local(),
+              player2Type: PlayerType.local(),
+            ),
+          ),
         ),
         OnboardingButtonConfiguration(
           type: OnboardingButtonType.localVersusAI,
-          action: OnboardingButtonAction.none(),
+          action: OnboardingButtonAction.startGame(
+            configuration: GameConfiguration(
+              player1Type: PlayerType.local(),
+              player2Type: PlayerType.ai(),
+            ),
+          ),
         ),
       ],
     ),

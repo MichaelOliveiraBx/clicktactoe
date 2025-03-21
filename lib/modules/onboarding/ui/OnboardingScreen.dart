@@ -1,10 +1,14 @@
+import 'dart:developer' as developer;
+
 import 'package:clicktactoe/modules/design/AppScafold.dart';
 import 'package:clicktactoe/modules/design/CrossFadeSwitcher.dart';
+import 'package:clicktactoe/modules/game/interfaces/domain/GameConfiguration.dart';
 import 'package:clicktactoe/modules/onboarding/ui/OnboardingStateHandler.dart';
 import 'package:clicktactoe/modules/onboarding/ui/OnboardingStepWidget.dart';
 import 'package:clicktactoe/modules/sdk/extensions/localization/LocalizationExtension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class OnboardingScreen extends ConsumerWidget {
   const OnboardingScreen({super.key});
@@ -25,7 +29,8 @@ class OnboardingScreen extends ConsumerWidget {
             configuration: final configuration,
           ):
             {
-              // Start game
+              final navigationParam = configuration.navigationParams;
+              context.pushNamed("game", pathParameters: navigationParam);
               break;
             }
           default:
@@ -47,7 +52,7 @@ class OnboardingScreen extends ConsumerWidget {
               opacity: state.displayBackButton ? 1 : 0,
               duration: Duration(milliseconds: 500),
               child: IconButton(
-                icon: Icon(Icons.arrow_back),
+                icon: Icon(Icons.arrow_back_ios),
                 color: Theme.of(context).primaryColor,
                 onPressed: () {
                   ref.read(onboardingStateHandlerProvider.notifier).previous();

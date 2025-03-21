@@ -10,14 +10,12 @@ import 'package:clicktactoe/modules/player/interfaces/PlayerType.dart';
 import 'package:clicktactoe/modules/sdk/extensions/localization/LocalizationExtension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class GameScreen extends ConsumerStatefulWidget {
-  final GameConfiguration configuration = const GameConfiguration(
-    player1Type: PlayerTypeLocal(),
-    player2Type: PlayerTypeLocal(),
-  );
+  final GameConfiguration configuration;
 
-  const GameScreen({super.key});
+  const GameScreen(this.configuration, {super.key});
 
   @override
   ConsumerState<GameScreen> createState() => _GameScreenState();
@@ -47,9 +45,26 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     return AppScaffold(
       child: Stack(
         children: [
+          Positioned(
+            top: 16,
+            left: 16,
+            child: IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              color: Theme.of(context).primaryColor,
+              onPressed: () {
+                context.pop();
+              },
+            ),
+          ),
           Column(
             children: [
-              Spacer(flex: 10),
+              Spacer(flex: 6),
+              Text(
+                context.l10n.appName,
+                style: Theme.of(context).textTheme.headlineLarge,
+                textAlign: TextAlign.center,
+              ),
+              Spacer(flex: 8),
               CrossFadeSwitcher(
                 child: Text(
                   key: ValueKey(state.status),
