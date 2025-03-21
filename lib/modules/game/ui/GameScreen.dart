@@ -4,8 +4,11 @@ import 'package:clicktactoe/modules/design/AppScafold.dart';
 import 'package:clicktactoe/modules/design/CrossFadeSwitcher.dart';
 import 'package:clicktactoe/modules/design/buttons/ClickableButton.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GameConfiguration.dart';
+import 'package:clicktactoe/modules/game/interfaces/domain/GamePoint.dart';
 import 'package:clicktactoe/modules/game/ui/notifiers/GameScreenUiStateNotifier.dart';
+import 'package:clicktactoe/modules/game/ui/table/GameTableUiState.dart';
 import 'package:clicktactoe/modules/game/ui/table/GameTableWidget.dart';
+import 'package:clicktactoe/modules/game/ui/table/point/PointWidget.dart';
 import 'package:clicktactoe/modules/player/interfaces/PlayerType.dart';
 import 'package:clicktactoe/modules/sdk/extensions/localization/LocalizationExtension.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +67,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                 style: Theme.of(context).textTheme.headlineLarge,
                 textAlign: TextAlign.center,
               ),
-              Spacer(flex: 8),
+              Spacer(flex: 5),
+              _buildPlayerScores(state),
+              Spacer(flex: 5),
               CrossFadeSwitcher(
                 child: Text(
                   key: ValueKey(state.status),
@@ -103,6 +108,50 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             context.l10n.commonReplay,
             style: Theme.of(context).textTheme.titleLarge,
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPlayerScores(GameScreenUiState state) {
+    return Container(
+      constraints: BoxConstraints.expand(height: 60),
+      padding: const EdgeInsets.symmetric(horizontal: 32),
+      child: Row(
+        children: [
+          _buildPlayerScore(true, state.player1Score),
+          SizedBox(width: 16),
+          _buildPlayerScore(false, state.player2Score),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPlayerScore(bool isPlayer1, int score) {
+    return Flexible(
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Theme.of(context).colorScheme.secondary,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        alignment: Alignment.center,
+        child: Row(
+          children: [
+            AspectRatio(
+              aspectRatio: 1,
+              child: PointWidget(isPlayer1: isPlayer1, withAnimation: false),
+            ),
+            Spacer(),
+            Text(
+              score.toString(),
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            Spacer(),
+          ],
         ),
       ),
     );
