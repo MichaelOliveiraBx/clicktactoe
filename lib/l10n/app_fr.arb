@@ -5,5 +5,10 @@
   "onboardingButtonLocal": "Ici \uD83D\uDC47 !",
   "onboardingButtonRemote": "En ligne \uD83C\uDF0D ! (Bientôt)",
   "onboardingButton2Players": "1 VS 1 \uD83D\uDD25",
-  "onboardingButtonVsAI": "VS AI \uD83D\uDCBB"
+  "onboardingButtonVsAI": "VS AI \uD83D\uDCBB",
+
+  "gamePlayer1turn" : "C'est à X de jouer \uD83D\uDC4D",
+  "gamePlayer2turn" : "C'est à O de jouer \uD83D\uDC4D",
+  "commonReplay" : "Rejouer",
+  "commonWin" : "Gagné"
 }

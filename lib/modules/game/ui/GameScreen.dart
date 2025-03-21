@@ -1,70 +1,108 @@
 import 'dart:developer' as developer;
 
-import 'package:clicktactoe/modules/game/core/manager/GameState.dart';
-import 'package:clicktactoe/modules/game/core/manager/LocalGameStateManager.dart';
+import 'package:clicktactoe/modules/design/AppScafold.dart';
+import 'package:clicktactoe/modules/design/CrossFadeSwitcher.dart';
+import 'package:clicktactoe/modules/design/buttons/ClickableButton.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GameConfiguration.dart';
-import 'package:clicktactoe/modules/game/interfaces/domain/GamePlayer.dart';
+import 'package:clicktactoe/modules/game/ui/notifiers/GameScreenUiStateNotifier.dart';
 import 'package:clicktactoe/modules/game/ui/table/GameTableWidget.dart';
 import 'package:clicktactoe/modules/player/interfaces/PlayerType.dart';
+import 'package:clicktactoe/modules/sdk/extensions/localization/LocalizationExtension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'GameScreen.g.dart';
-
-class GameScreenUiState {
-  final String message;
-
-  GameScreenUiState({required this.message});
-}
-
-@Riverpod()
-class GameScreenUiStateNotifier extends _$GameScreenUiStateNotifier {
-  @override
-  GameScreenUiState build(GameConfiguration configuration) {
-    final gameState = ref.watch(localGameStateManagerProvider(configuration));
-    developer.log(
-      'BUILD gameState:$gameState',
-      name: 'GameScreenUiStateNotifier',
-    );
-    final message = switch (gameState) {
-      GameStateIdle() => 'Ready',
-      GameStatePlaying() => switch (gameState.playerTour) {
-        GamePlayer.player1 => 'Player 1 turn',
-        GamePlayer.player2 => 'Player 2 turn',
-      },
-      GameStateEnded() => 'Winner: ${gameState.playerWinner}',
-    };
-
-    return GameScreenUiState(message: message);
-  }
-}
-
-class GameScreen extends ConsumerWidget {
+class GameScreen extends ConsumerStatefulWidget {
   final GameConfiguration configuration = const GameConfiguration(
     player1Type: PlayerTypeLocal(),
-    player2Type: PlayerTypeAI(),
+    player2Type: PlayerTypeLocal(),
   );
 
-  const GameScreen({
-    super.key,
-  });
+  const GameScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(gameScreenUiStateNotifierProvider(configuration));
-    return Scaffold(
-      body: Stack(
+  ConsumerState<GameScreen> createState() => _GameScreenState();
+}
+
+class _GameScreenState extends ConsumerState<GameScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    // We want to start the game but we need to wait the widget
+    // building task to modifier notifier
+    Future.microtask(() {
+      ref
+          .read(
+            gameScreenUiStateNotifierProvider(widget.configuration).notifier,
+          )
+          .restart();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final state = ref.watch(
+      gameScreenUiStateNotifierProvider(widget.configuration),
+    );
+    return AppScaffold(
+      child: Stack(
         children: [
-          Center(child: GameTableWidget(configuration: configuration)),
-          Positioned(
-            bottom: 120,
-            left: 0,
-            right: 0,
-            child: Text(state.message),
+          Column(
+            children: [
+              Spacer(flex: 10),
+              CrossFadeSwitcher(
+                child: Text(
+                  key: ValueKey(state.status),
+                  state.status.message(context),
+                  style: Theme.of(context).textTheme.displaySmall,
+                ),
+              ),
+              SizedBox(height: 40),
+              GameTableWidget(configuration: widget.configuration),
+              Spacer(flex: 6),
+              _restartBuildRestartButton(),
+              Spacer(flex: 6),
+            ],
           ),
         ],
       ),
     );
+  }
+
+  Widget _restartBuildRestartButton() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 40),
+      child: SizedBox(
+        height: 68,
+        child: ClickableButton(
+          onClick: () {
+            ref
+                .read(
+                  gameScreenUiStateNotifierProvider(
+                    widget.configuration,
+                  ).notifier,
+                )
+                .restart();
+          },
+          child: Text(
+            context.l10n.commonReplay,
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+extension EndedTurnTypeLocalized on EndedTurnType {
+  String message(BuildContext context) {
+    switch (this) {
+      case EndedTurnType.none:
+        return "";
+      case EndedTurnType.player1:
+        return context.l10n.gamePlayer1turn;
+      case EndedTurnType.player2:
+        return context.l10n.gamePlayer2turn;
+    }
   }
 }

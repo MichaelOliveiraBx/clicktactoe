@@ -84,6 +84,6 @@ class SelectableButtonPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return this == oldDelegate;
+    return this != oldDelegate;
   }
 }

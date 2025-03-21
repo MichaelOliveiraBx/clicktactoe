@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'GameScreen.dart';
+part of 'GameScreenUiStateNotifier.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
 String _$gameScreenUiStateNotifierHash() =>
-    r'3222e3b78f29214c0521080957d6b31217c57e07';
+    r'ed5d08bf25fb6144ac6f64c5b6d1e4d3162ab2af';
 
 /// Copied from Dart SDK
 class _SystemHash {

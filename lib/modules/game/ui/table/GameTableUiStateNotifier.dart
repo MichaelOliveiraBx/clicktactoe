@@ -32,22 +32,13 @@ class GameTableUiStateNotifier extends _$GameTableUiStateNotifier {
       return;
     }
 
+    developer.log(
+      'onPointSelected row: $row, column: $column',
+      name: 'GameTableUiStateNotifier',
+    );
+
     ref
         .read(localGameStateManagerProvider(configuration).notifier)
         .onPointSelected(GamePointCoordinates(x: row, y: column));
-  }
-
-  void restart() {
-    final configuration = _configuration;
-    if (configuration == null) {
-      developer.log(
-        'restart Configuration is null',
-        name: 'GameTableUiStateNotifier',
-        error: 'Configuration must not be null',
-      );
-      return;
-    }
-
-    ref.read(localGameStateManagerProvider(configuration).notifier).start();
   }
 }

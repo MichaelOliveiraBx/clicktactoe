@@ -4,7 +4,7 @@ import 'package:clicktactoe/modules/onboarding/ui/OnboardingScreen.dart';
 import 'package:go_router/go_router.dart';
 
 GoRouter mainRoute() => GoRouter(
-  initialLocation: "/onboarding",
+  initialLocation: "/game",
   routes: [
     GoRoute(
       name: "game",

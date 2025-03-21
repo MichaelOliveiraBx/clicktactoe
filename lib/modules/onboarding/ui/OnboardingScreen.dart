@@ -1,4 +1,5 @@
-import 'package:clicktactoe/modules/design/theme/color/ColorUtils.dart';
+import 'package:clicktactoe/modules/design/AppScafold.dart';
+import 'package:clicktactoe/modules/design/CrossFadeSwitcher.dart';
 import 'package:clicktactoe/modules/onboarding/ui/OnboardingStateHandler.dart';
 import 'package:clicktactoe/modules/onboarding/ui/OnboardingStepWidget.dart';
 import 'package:clicktactoe/modules/sdk/extensions/localization/LocalizationExtension.dart';
@@ -35,70 +36,43 @@ class OnboardingScreen extends ConsumerWidget {
       },
     );
 
-    final backgroundColor = Theme.of(context).scaffoldBackgroundColor;
-    final lightBackgroundColor = backgroundColor.changeColorLightness(1.2);
-
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              lightBackgroundColor,
-              backgroundColor,
-              lightBackgroundColor,
-            ],
+    return AppScaffold(
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Positioned(
+            top: 16,
+            left: 16,
+            child: AnimatedOpacity(
+              opacity: state.displayBackButton ? 1 : 0,
+              duration: Duration(milliseconds: 500),
+              child: IconButton(
+                icon: Icon(Icons.arrow_back),
+                color: Theme.of(context).primaryColor,
+                onPressed: () {
+                  ref.read(onboardingStateHandlerProvider.notifier).previous();
+                },
+              ),
+            ),
           ),
-        ),
-        constraints: BoxConstraints.expand(),
-        child: SafeArea(
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              Positioned(
-                top: 16,
-                left: 16,
-                child: AnimatedOpacity(
-                  opacity: state.displayBackButton ? 1 : 0,
-                  duration: Duration(milliseconds: 500),
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_back),
-                    color: Theme.of(context).primaryColor,
-                    onPressed: () {
-                      ref
-                          .read(onboardingStateHandlerProvider.notifier)
-                          .previous();
-                    },
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 80,
-                left: 0,
-                right: 0,
-                child: Text(
-                  context.l10n.appName,
-                  style: Theme.of(context).textTheme.headlineLarge,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Positioned(
-                top: 200,
-                right: 32,
-                left: 32,
-                bottom: 0,
-                child: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 500),
-                  transitionBuilder:
-                      (widget, animation) =>
-                          FadeTransition(opacity: animation, child: widget),
-                  child: currentStepWidget,
-                ),
-              ),
-            ],
+          Positioned(
+            top: 80,
+            left: 0,
+            right: 0,
+            child: Text(
+              context.l10n.appName,
+              style: Theme.of(context).textTheme.headlineLarge,
+              textAlign: TextAlign.center,
+            ),
           ),
-        ),
+          Positioned(
+            top: 200,
+            right: 32,
+            left: 32,
+            bottom: 0,
+            child: CrossFadeSwitcher(child: currentStepWidget),
+          ),
+        ],
       ),
     );
   }

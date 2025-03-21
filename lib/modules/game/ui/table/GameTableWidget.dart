@@ -1,6 +1,8 @@
 import 'package:clicktactoe/modules/game/interfaces/domain/GameConfiguration.dart';
 import 'package:clicktactoe/modules/game/ui/table/GameTableUiState.dart';
 import 'package:clicktactoe/modules/game/ui/table/GameTableUiStateNotifier.dart';
+import 'package:clicktactoe/modules/game/ui/table/GridPainter.dart';
+import 'package:clicktactoe/modules/game/ui/table/point/PointWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,69 +12,112 @@ class GameTableWidget extends ConsumerStatefulWidget {
   const GameTableWidget({super.key, required this.configuration});
 
   @override
-  _GameTableWidgetState createState() => _GameTableWidgetState();
+  ConsumerState<GameTableWidget> createState() => _GameTableWidgetState();
 }
 
-class _GameTableWidgetState extends ConsumerState<GameTableWidget> {
+class _GameTableWidgetState extends ConsumerState<GameTableWidget>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _gridAnimationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _gridAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+    _gridAnimationController.forward();
+    _gridAnimationController.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _gridAnimationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final size = (MediaQuery.sizeOf(context).width * 0.8);
+
     final uiState = ref.watch(
       gameTableUiStateNotifierProvider(widget.configuration),
     );
-    return IntrinsicHeight(
-      child: IntrinsicWidth(
-        child: Column(
-          children: [
-            for (var column = 0; column < 3; column++)
-              Row(
-                children: [
-                  for (var row = 0; row < 3; row++)
-                    GestureDetector(
-                      onTap:
-                          () => ref
-                              .read(
-                                gameTableUiStateNotifierProvider(
-                                  widget.configuration,
-                                ).notifier,
-                              )
-                              .onPointSelected(row, column),
-                      child: Container(
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(border: Border.all()),
-                        child: Center(
-                          child: _buildPoint(uiState.table[column][row]),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ElevatedButton(
-              onPressed:
-                  () =>
-                      ref
+    return SizedBox(
+      width: size,
+      height: size,
+      child: Stack(
+        children: [buildGrid(), buildGestureGrid(size / 3, uiState)],
+      ),
+    );
+    // return buildGestureGrid(size / 3, uiState);
+  }
+
+  Widget buildGestureGrid(double cellSize, GameTableUiState uiState) {
+    return Column(
+      children: [
+        for (var column = 0; column < 3; column++)
+          Row(
+            children: [
+              for (var row = 0; row < 3; row++)
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap:
+                      () => ref
                           .read(
                             gameTableUiStateNotifierProvider(
                               widget.configuration,
                             ).notifier,
                           )
-                          .restart(),
-              child: Text('Restart'),
-            ),
-          ],
+                          .onPointSelected(row, column),
+                  child: SizedBox(
+                    width: cellSize,
+                    height: cellSize,
+                    child: Center(
+                      child: _buildPoint(uiState.table[column][row], cellSize),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+      ],
+    );
+  }
+
+  Widget buildGrid() {
+    return Positioned(
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      child: CustomPaint(
+        painter: GridPainter(
+          color: Theme.of(context).colorScheme.secondary,
+          animateValue: _gridAnimationController.value,
         ),
       ),
     );
   }
 
-  Widget _buildPoint(GameTablePointUiState state) {
+  Widget? _buildPoint(GameTablePointUiState state, double cellSize) {
+    const coeff = 0.5;
     switch (state.type) {
       case GameTablePointType.empty:
-        return Container();
+        return null;
       case GameTablePointType.cross:
-        return Icon(Icons.close, color: state.isWinning ? Colors.green : null);
+        return SizedBox(
+          width: cellSize * coeff,
+          height: cellSize * coeff,
+          child: PointWidget(isPlayer1: true),
+        );
       case GameTablePointType.circle:
-        return Icon(Icons.circle, color: state.isWinning ? Colors.green : null);
+        return SizedBox(
+          width: cellSize * coeff,
+          height: cellSize * coeff,
+          child: PointWidget(isPlayer1: false),
+        );
     }
   }
 }
