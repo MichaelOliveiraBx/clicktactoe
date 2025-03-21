@@ -7,7 +7,7 @@ part of 'LocalGameStateManager.dart';
 // **************************************************************************
 
 String _$localGameStateManagerHash() =>
-    r'd8cac92aefe6e3e063ad624e48c83aad9b4abde6';
+    r'9901255bd9178c1b0500c69984c35640abc0fe70';
 
 /// Copied from Dart SDK
 class _SystemHash {

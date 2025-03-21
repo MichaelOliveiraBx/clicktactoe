@@ -36,10 +36,7 @@ class LocalGameStateManager extends _$LocalGameStateManager {
   GameState build(GameConfiguration configuration) {
     _configuration = configuration;
 
-    developer.log('BUILD', name: 'LocalGameStateManager');
-
     ref.onCancel(() {
-      developer.log('onCancel', name: 'LocalGameStateManager');
       stop();
     });
 
@@ -162,10 +159,6 @@ class LocalGameStateManager extends _$LocalGameStateManager {
       return;
     }
     final currentState = state;
-    developer.log(
-      'onPointSelected: $point currentState:$currentState',
-      name: 'LocalGameStateManager',
-    );
     if (currentState is GameStatePlaying) {
       switch (currentState.playerTour) {
         case GamePlayer.player1:

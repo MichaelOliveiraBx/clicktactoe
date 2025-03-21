@@ -1,0 +1,9 @@
+{
+  "appName": "Click Tac Toe",
+  "onboardingStepLocalOrRemoteTitle": "On se fait ca ici ou en ligne?",
+  "onboardingStepSelectLocalVersusTitle": "C'est maintenant \uD83D\uDC7B !! choisi contre qui tu veux jouer ?",
+  "onboardingButtonLocal": "Ici \uD83D\uDC47 !",
+  "onboardingButtonRemote": "En ligne \uD83C\uDF0D ! (Bientôt)",
+  "onboardingButton2Players": "1 VS 1 \uD83D\uDD25",
+  "onboardingButtonVsAI": "VS AI \uD83D\uDCBB"
+}
