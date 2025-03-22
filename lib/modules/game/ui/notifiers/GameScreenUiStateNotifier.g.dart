@@ -7,7 +7,7 @@ part of 'GameScreenUiStateNotifier.dart';
 // **************************************************************************
 
 String _$gameScreenUiStateNotifierHash() =>
-    r'ed5d08bf25fb6144ac6f64c5b6d1e4d3162ab2af';
+    r'dd97cfcdddb5d0efe1e21c2fd51ca250ce3267bb';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,10 +31,10 @@ class _SystemHash {
 }
 
 abstract class _$GameScreenUiStateNotifier
-    extends BuildlessAutoDisposeNotifier<GameScreenUiState> {
+    extends BuildlessAutoDisposeAsyncNotifier<GameScreenUiState> {
   late final GameConfiguration configuration;
 
-  GameScreenUiState build(GameConfiguration configuration);
+  FutureOr<GameScreenUiState> build(GameConfiguration configuration);
 }
 
 /// See also [GameScreenUiStateNotifier].
@@ -42,7 +42,8 @@ abstract class _$GameScreenUiStateNotifier
 const gameScreenUiStateNotifierProvider = GameScreenUiStateNotifierFamily();
 
 /// See also [GameScreenUiStateNotifier].
-class GameScreenUiStateNotifierFamily extends Family<GameScreenUiState> {
+class GameScreenUiStateNotifierFamily
+    extends Family<AsyncValue<GameScreenUiState>> {
   /// See also [GameScreenUiStateNotifier].
   const GameScreenUiStateNotifierFamily();
 
@@ -76,7 +77,7 @@ class GameScreenUiStateNotifierFamily extends Family<GameScreenUiState> {
 /// See also [GameScreenUiStateNotifier].
 class GameScreenUiStateNotifierProvider
     extends
-        AutoDisposeNotifierProviderImpl<
+        AutoDisposeAsyncNotifierProviderImpl<
           GameScreenUiStateNotifier,
           GameScreenUiState
         > {
@@ -109,7 +110,7 @@ class GameScreenUiStateNotifierProvider
   final GameConfiguration configuration;
 
   @override
-  GameScreenUiState runNotifierBuild(
+  FutureOr<GameScreenUiState> runNotifierBuild(
     covariant GameScreenUiStateNotifier notifier,
   ) {
     return notifier.build(configuration);
@@ -132,7 +133,7 @@ class GameScreenUiStateNotifierProvider
   }
 
   @override
-  AutoDisposeNotifierProviderElement<
+  AutoDisposeAsyncNotifierProviderElement<
     GameScreenUiStateNotifier,
     GameScreenUiState
   >
@@ -158,14 +159,14 @@ class GameScreenUiStateNotifierProvider
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 mixin GameScreenUiStateNotifierRef
-    on AutoDisposeNotifierProviderRef<GameScreenUiState> {
+    on AutoDisposeAsyncNotifierProviderRef<GameScreenUiState> {
   /// The parameter `configuration` of this provider.
   GameConfiguration get configuration;
 }
 
 class _GameScreenUiStateNotifierProviderElement
     extends
-        AutoDisposeNotifierProviderElement<
+        AutoDisposeAsyncNotifierProviderElement<
           GameScreenUiStateNotifier,
           GameScreenUiState
         >

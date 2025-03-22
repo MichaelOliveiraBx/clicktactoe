@@ -1,45 +1,55 @@
 import 'dart:math';
 
 import 'package:async/async.dart';
+import 'package:cancellation_token/cancellation_token.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePlayer.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePoint.dart';
+import 'package:clicktactoe/modules/player/interfaces/PlayerHandler.dart';
+import 'package:clicktactoe/modules/player/interfaces/PlayerState.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'dart:developer' as developer;
 
 part 'MinimaxAiPlayerProvider.g.dart';
 
 @riverpod
-class MinimaxAiPlayerProvider extends _$MinimaxAiPlayerProvider {
-  bool isPlaying = false;
+class MinimaxAiPlayerProvider extends _$MinimaxAiPlayerProvider
+    implements PlayerHandler, PlayerStateHandler {
+  @override
+  PlayerState build(GamePlayer player) {
+    return PlayerState();
+  }
 
   @override
-  List<GamePoint> build() {
-    return [];
-  }
-
   void onPointSelected(GamePoint point) {}
 
-  Future<void> handleMove(List<GamePoint> table) async {
-    await Future.delayed(const Duration(milliseconds: 700));
-    final board = table.toBoard();
-    final newPoint = findBestMove2(board).toGamePoint(GamePlayer.player2);
+  @override
+  Future<void> handleMove(
+      List<GamePoint> table,
+      CancellationToken cancellationToken,
+      ) async {
+    state = state.copyWith(isPlayerTour: true);
+    await Future.microtask(() async {
+      await Future.delayed(const Duration(milliseconds: 700));
+      final board = table.toBoard();
+      final newPoint = findBestMove(board).toGamePoint(GamePlayer.player2);
 
-    developer.log(
-      'isPlaying:$isPlaying board:$board newPoint:$newPoint',
-      name: 'MinimaxAiPlayerProvider',
-    );
-    if (!isPlaying) return;
-
-    state = state + [newPoint];
+      developer.log(
+        'cancellationToken:${cancellationToken.isCancelled}',
+        name: 'ChatGptAiPlayerProvider',
+      );
+      if (cancellationToken.isCancelled) {
+        return;
+      }
+      state = state.copyWith(
+        points: state.points + [newPoint],
+        isPlayerTour: false,
+      );
+    });
   }
 
-  void stop() {
-    isPlaying = false;
-  }
-
+  @override
   void restart() {
-    isPlaying = true;
-    state = [];
+    state = PlayerState();
   }
 }
 

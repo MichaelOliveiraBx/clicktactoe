@@ -9,6 +9,7 @@ import 'package:clicktactoe/modules/game/interfaces/domain/GamePlayer.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePoint.dart';
 import 'package:clicktactoe/modules/player/core/LocalPlayerHandler.dart';
 import 'package:clicktactoe/modules/player/core/ai/chatgpt/ChatGptAiPlayerProvider.dart';
+import 'package:clicktactoe/modules/player/core/ai/mimimax/MinimaxAiPlayerProvider.dart';
 import 'package:clicktactoe/modules/player/interfaces/PlayerHandler.dart';
 import 'package:clicktactoe/modules/player/interfaces/PlayerType.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -20,7 +21,8 @@ dynamic playerProvider(PlayerType type, GamePlayer player) {
     case PlayerTypeLocal():
       return localPlayerHandlerProvider(player);
     case PlayerTypeAI():
-      return chatGptAiPlayerProviderProvider(player);
+      // return chatGptAiPlayerProviderProvider(player);
+      return minimaxAiPlayerProviderProvider(player);
     case PlayerTypeRemote():
       throw UnimplementedError();
   }

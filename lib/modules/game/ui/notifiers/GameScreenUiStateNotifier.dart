@@ -38,7 +38,7 @@ class GameScreenUiStateNotifier extends _$GameScreenUiStateNotifier {
   GameConfiguration? _configuration;
 
   @override
-  GameScreenUiState build(GameConfiguration configuration) {
+  Future<GameScreenUiState> build(GameConfiguration configuration) async {
     _configuration = configuration;
 
     final gameState = ref.watch(localGameStateManagerProvider(configuration));
@@ -61,6 +61,7 @@ class GameScreenUiStateNotifier extends _$GameScreenUiStateNotifier {
         }
       case GameStateEnded():
         {
+          await Future.delayed(const Duration(milliseconds: 500));
           status = EndedTurnType.none;
           final EndedGameType type;
           switch (gameState.playerWinner) {
@@ -81,11 +82,13 @@ class GameScreenUiStateNotifier extends _$GameScreenUiStateNotifier {
         }
     }
 
-    return GameScreenUiState(
-      status: status,
-      endedUiState: endedUiState,
-      player1Score: _player1Score,
-      player2Score: _player2Score,
+    return Future.value(
+      GameScreenUiState(
+        status: status,
+        endedUiState: endedUiState,
+        player1Score: _player1Score,
+        player2Score: _player2Score,
+      ),
     );
   }
 
