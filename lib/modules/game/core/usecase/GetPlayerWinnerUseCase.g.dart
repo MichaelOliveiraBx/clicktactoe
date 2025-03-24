@@ -7,7 +7,7 @@ part of 'GetPlayerWinnerUseCase.dart';
 // **************************************************************************
 
 String _$getPlayerWinnerUseCaseHash() =>
-    r'e5937436dcc7247cad8358f9cf3d61cd953804ff';
+    r'd7026e365ee9142f00d6b7cfc2c3c7d3f20b23e5';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -40,18 +40,15 @@ class GetPlayerWinnerUseCaseFamily extends Family<WinnerData?> {
   const GetPlayerWinnerUseCaseFamily();
 
   /// See also [getPlayerWinnerUseCase].
-  GetPlayerWinnerUseCaseProvider call(
-    List<GamePoint> player1Points,
-    List<GamePoint> player2Points,
-  ) {
-    return GetPlayerWinnerUseCaseProvider(player1Points, player2Points);
+  GetPlayerWinnerUseCaseProvider call(GamePoints player1, GamePoints player2) {
+    return GetPlayerWinnerUseCaseProvider(player1, player2);
   }
 
   @override
   GetPlayerWinnerUseCaseProvider getProviderOverride(
     covariant GetPlayerWinnerUseCaseProvider provider,
   ) {
-    return call(provider.player1Points, provider.player2Points);
+    return call(provider.player1, provider.player2);
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -72,14 +69,12 @@ class GetPlayerWinnerUseCaseFamily extends Family<WinnerData?> {
 /// See also [getPlayerWinnerUseCase].
 class GetPlayerWinnerUseCaseProvider extends AutoDisposeProvider<WinnerData?> {
   /// See also [getPlayerWinnerUseCase].
-  GetPlayerWinnerUseCaseProvider(
-    List<GamePoint> player1Points,
-    List<GamePoint> player2Points,
-  ) : this._internal(
+  GetPlayerWinnerUseCaseProvider(GamePoints player1, GamePoints player2)
+    : this._internal(
         (ref) => getPlayerWinnerUseCase(
           ref as GetPlayerWinnerUseCaseRef,
-          player1Points,
-          player2Points,
+          player1,
+          player2,
         ),
         from: getPlayerWinnerUseCaseProvider,
         name: r'getPlayerWinnerUseCaseProvider',
@@ -90,8 +85,8 @@ class GetPlayerWinnerUseCaseProvider extends AutoDisposeProvider<WinnerData?> {
         dependencies: GetPlayerWinnerUseCaseFamily._dependencies,
         allTransitiveDependencies:
             GetPlayerWinnerUseCaseFamily._allTransitiveDependencies,
-        player1Points: player1Points,
-        player2Points: player2Points,
+        player1: player1,
+        player2: player2,
       );
 
   GetPlayerWinnerUseCaseProvider._internal(
@@ -101,12 +96,12 @@ class GetPlayerWinnerUseCaseProvider extends AutoDisposeProvider<WinnerData?> {
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.player1Points,
-    required this.player2Points,
+    required this.player1,
+    required this.player2,
   }) : super.internal();
 
-  final List<GamePoint> player1Points;
-  final List<GamePoint> player2Points;
+  final GamePoints player1;
+  final GamePoints player2;
 
   @override
   Override overrideWith(
@@ -121,8 +116,8 @@ class GetPlayerWinnerUseCaseProvider extends AutoDisposeProvider<WinnerData?> {
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        player1Points: player1Points,
-        player2Points: player2Points,
+        player1: player1,
+        player2: player2,
       ),
     );
   }
@@ -135,15 +130,15 @@ class GetPlayerWinnerUseCaseProvider extends AutoDisposeProvider<WinnerData?> {
   @override
   bool operator ==(Object other) {
     return other is GetPlayerWinnerUseCaseProvider &&
-        other.player1Points == player1Points &&
-        other.player2Points == player2Points;
+        other.player1 == player1 &&
+        other.player2 == player2;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, player1Points.hashCode);
-    hash = _SystemHash.combine(hash, player2Points.hashCode);
+    hash = _SystemHash.combine(hash, player1.hashCode);
+    hash = _SystemHash.combine(hash, player2.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -152,11 +147,11 @@ class GetPlayerWinnerUseCaseProvider extends AutoDisposeProvider<WinnerData?> {
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 mixin GetPlayerWinnerUseCaseRef on AutoDisposeProviderRef<WinnerData?> {
-  /// The parameter `player1Points` of this provider.
-  List<GamePoint> get player1Points;
+  /// The parameter `player1` of this provider.
+  GamePoints get player1;
 
-  /// The parameter `player2Points` of this provider.
-  List<GamePoint> get player2Points;
+  /// The parameter `player2` of this provider.
+  GamePoints get player2;
 }
 
 class _GetPlayerWinnerUseCaseProviderElement
@@ -165,11 +160,9 @@ class _GetPlayerWinnerUseCaseProviderElement
   _GetPlayerWinnerUseCaseProviderElement(super.provider);
 
   @override
-  List<GamePoint> get player1Points =>
-      (origin as GetPlayerWinnerUseCaseProvider).player1Points;
+  GamePoints get player1 => (origin as GetPlayerWinnerUseCaseProvider).player1;
   @override
-  List<GamePoint> get player2Points =>
-      (origin as GetPlayerWinnerUseCaseProvider).player2Points;
+  GamePoints get player2 => (origin as GetPlayerWinnerUseCaseProvider).player2;
 }
 
 // ignore_for_file: type=lint

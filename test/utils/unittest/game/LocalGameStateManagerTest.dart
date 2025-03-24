@@ -1,8 +1,10 @@
 import 'package:clicktactoe/modules/game/core/manager/GameState.dart';
 import 'package:clicktactoe/modules/game/core/manager/LocalGameStateManager.dart';
+import 'package:clicktactoe/modules/game/core/usecase/GetPlayerWinnerUseCase.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GameConfiguration.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePlayer.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePoint.dart';
+import 'package:clicktactoe/modules/game/interfaces/domain/GamePointStatus.dart';
 import 'package:clicktactoe/modules/player/interfaces/PlayerHandler.dart';
 import 'package:clicktactoe/modules/player/interfaces/PlayerState.dart';
 import 'package:clicktactoe/modules/player/interfaces/PlayerType.dart';
@@ -29,8 +31,55 @@ class MockPlayerHandlerState extends StateNotifier<PlayerState>
 
 @GenerateMocks([MockPlayerNotifier])
 void main() {
-  group('LocalGameStateManager Tests', () {
-    late GameConfiguration configuration;
+  final configuration = GameConfiguration(
+    player1Type: PlayerTypeLocal(),
+    player2Type: PlayerTypeLocal(),
+  );
+
+  ProviderContainer getProviderContainer({
+    List<Override> overrides = const [],
+    required MockMockPlayerNotifier localPlayer1Notifier,
+    required MockMockPlayerNotifier localPlayer2Notifier,
+    required MockPlayerHandlerState localPlayer1StateHandler,
+    required MockPlayerHandlerState localPlayer2StateHandler,
+  }) {
+    final mockNotifierProvider1 = Provider((ref) => localPlayer1Notifier);
+    final mockNotifierProvider2 = Provider((ref) => localPlayer2Notifier);
+
+    final mockProvider1 =
+        StateNotifierProvider<MockPlayerHandlerState, PlayerState>(
+          (ref) => localPlayer1StateHandler,
+        );
+
+    final mockProvider2 =
+        StateNotifierProvider<MockPlayerHandlerState, PlayerState>((ref) {
+          return localPlayer2StateHandler;
+        });
+
+    return createContainer(
+      overrides: [
+        getPlayerStateNotifierProvider(
+          configuration.player1Type,
+          GamePlayer.player1,
+        ).overrideWithValue(mockProvider1),
+        getPlayerStateNotifierProvider(
+          configuration.player2Type,
+          GamePlayer.player2,
+        ).overrideWithValue(mockProvider2),
+        getPlayerNotifierProvider(
+          configuration.player1Type,
+          GamePlayer.player1,
+        ).overrideWithValue(mockNotifierProvider1),
+        getPlayerNotifierProvider(
+          configuration.player2Type,
+          GamePlayer.player2,
+        ).overrideWithValue(mockNotifierProvider2),
+        ...overrides,
+      ],
+    );
+  }
+
+  group('LocalGameStateManager setUp', () {
     late ProviderContainer container;
     late MockPlayerHandlerState player1StateHandler;
     late MockPlayerHandlerState player2StateHandler;
@@ -51,70 +100,18 @@ void main() {
     }
 
     setUp(() {
-      configuration = GameConfiguration(
-        player1Type: PlayerTypeLocal(),
-        player2Type: PlayerTypeLocal(),
-      );
-
       player1Notifier = MockMockPlayerNotifier();
       player2Notifier = MockMockPlayerNotifier();
-
-      final mockNotifierProvider1 = Provider((ref) => player1Notifier);
-      final mockNotifierProvider2 = Provider((ref) => player2Notifier);
 
       player1StateHandler = MockPlayerHandlerState();
       player2StateHandler = MockPlayerHandlerState();
 
-      final mockProvider1 =
-          StateNotifierProvider<MockPlayerHandlerState, PlayerState>(
-            (ref) => player1StateHandler,
-          );
-
-      final mockProvider2 =
-          StateNotifierProvider<MockPlayerHandlerState, PlayerState>(
-            (ref) => player2StateHandler,
-          );
-
-      container = createContainer(
-        overrides: [
-          getPlayerStateNotifierProvider(
-            configuration.player1Type,
-            GamePlayer.player1,
-          ).overrideWithValue(mockProvider1),
-          getPlayerStateNotifierProvider(
-            configuration.player2Type,
-            GamePlayer.player2,
-          ).overrideWithValue(mockProvider2),
-          getPlayerNotifierProvider(
-            configuration.player1Type,
-            GamePlayer.player1,
-          ).overrideWithValue(mockNotifierProvider1),
-          getPlayerNotifierProvider(
-            configuration.player2Type,
-            GamePlayer.player2,
-          ).overrideWithValue(mockNotifierProvider2),
-        ],
+      container = getProviderContainer(
+        localPlayer1Notifier: player1Notifier,
+        localPlayer2Notifier: player2Notifier,
+        localPlayer1StateHandler: player1StateHandler,
+        localPlayer2StateHandler: player2StateHandler,
       );
-    });
-
-    test("Test", () async {
-      final subscription = getSubscription();
-
-      final notifier = container.read(
-        localGameStateManagerProvider(configuration).notifier,
-      );
-
-      final value = subscription.read();
-      expect(value, GameStateIdle());
-
-      notifier.start();
-
-      verify(player1Notifier.restart()).called(1);
-      verify(player2Notifier.restart()).called(1);
-
-      await Future.microtask(() {});
-      verify(player1Notifier.handleMove(any, any)).called(1);
-      verifyNever(player1Notifier.handleMove(any, any));
     });
 
     test("Check init state", () async {
@@ -171,6 +168,80 @@ void main() {
         GameStatePlaying(
           table: [player1GamePoint, player2GamePoint],
           playerTour: GamePlayer.player2,
+        ),
+      );
+    });
+
+    test("Start call player 1 handle move", () async {
+      final notifier = container.read(
+        localGameStateManagerProvider(configuration).notifier,
+      );
+
+      notifier.start();
+
+      verify(player1Notifier.restart()).called(1);
+      verify(player2Notifier.restart()).called(1);
+
+      await Future.microtask(() {});
+      verify(player1Notifier.handleMove(any, any)).called(1);
+      verifyNever(player1Notifier.handleMove(any, any));
+
+      notifier.stop();
+    });
+  });
+
+  group("LocalGameStateManager override provider without setup", () {
+    test("Check when one player win", () async {
+      final player1GamePoint = GamePoint(
+        player: GamePlayer.player1,
+        coordinates: GamePointCoordinates(x: 0, y: 0),
+      );
+
+      final player2GamePoint = GamePoint(
+        player: GamePlayer.player2,
+        coordinates: GamePointCoordinates(x: 1, y: 1),
+      );
+
+      final player2GamePointWinner = player2GamePoint.copyWith(
+        status: GamePointStatus.win,
+      );
+
+      final winnerData = WinnerData(
+        winnerPlayerPoints: [player1GamePoint, player2GamePointWinner],
+        playerWinner: GamePlayer.player2,
+      );
+
+      final player1Notifier = MockMockPlayerNotifier();
+      final player2Notifier = MockMockPlayerNotifier();
+
+      final player1StateHandler = MockPlayerHandlerState();
+      final player2StateHandler = MockPlayerHandlerState();
+
+      final container = getProviderContainer(
+        localPlayer1Notifier: player1Notifier,
+        localPlayer2Notifier: player2Notifier,
+        localPlayer1StateHandler: player1StateHandler,
+        localPlayer2StateHandler: player2StateHandler,
+        overrides: [
+          getPlayerWinnerUseCaseProvider(
+            GamePoints(points: [player1GamePoint]),
+            GamePoints(points: [player2GamePoint]),
+          ).overrideWithValue(winnerData),
+        ],
+      );
+
+      player1StateHandler.setState(
+        PlayerState(isPlayerTour: false, points: [player1GamePoint]),
+      );
+      player2StateHandler.setState(
+        PlayerState(isPlayerTour: true, points: [player2GamePoint]),
+      );
+
+      expect(
+        container.read(localGameStateManagerProvider(configuration)),
+        GameStateEnded(
+          playerWinner: GamePlayer.player2,
+          table: [player1GamePoint, player2GamePointWinner],
         ),
       );
     });

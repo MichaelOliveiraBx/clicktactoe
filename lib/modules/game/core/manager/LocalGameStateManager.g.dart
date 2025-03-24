@@ -305,7 +305,7 @@ class _GetPlayerNotifierProviderElement
 }
 
 String _$localGameStateManagerHash() =>
-    r'a9e39933756ae9acebd447990414c830794345fe';
+    r'0e2ec90cb2696c7d390bcb54b8087939c46bc3f6';
 
 abstract class _$LocalGameStateManager
     extends BuildlessAutoDisposeNotifier<GameState> {

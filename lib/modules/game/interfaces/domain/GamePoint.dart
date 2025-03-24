@@ -6,10 +6,8 @@ part 'GamePoint.freezed.dart';
 
 @freezed
 abstract class GamePointCoordinates with _$GamePointCoordinates {
-  const factory GamePointCoordinates({
-    required int x,
-    required int y,
-  }) = _GamePointCoordinates;
+  const factory GamePointCoordinates({required int x, required int y}) =
+      _GamePointCoordinates;
 }
 
 @freezed
@@ -19,4 +17,9 @@ abstract class GamePoint with _$GamePoint {
     required GamePlayer player,
     required GamePointCoordinates coordinates,
   }) = _GamePoint;
+}
+
+@freezed
+abstract class GamePoints with _$GamePoints {
+  const factory GamePoints({@Default([]) List<GamePoint> points}) = _GamePoints;
 }

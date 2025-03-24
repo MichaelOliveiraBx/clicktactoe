@@ -74,7 +74,12 @@ class LocalGameStateManager extends _$LocalGameStateManager {
     _configuration = configuration;
 
     ref.onCancel(() {
+      print("onCancel");
       stop();
+    });
+
+    ref.onDispose(() {
+      print("onDispose");
     });
 
     final player1Points = ref.watch(_player1Provider);
@@ -87,10 +92,12 @@ class LocalGameStateManager extends _$LocalGameStateManager {
 
     final winner = ref.read(
       getPlayerWinnerUseCaseProvider(
-        player1Points.points,
-        player2Points.points,
+        GamePoints(points: player1Points.points),
+        GamePoints(points: player2Points.points),
       ),
     );
+
+    print("winner $winner player1Points $player1Points player2Points $player2Points");
 
     if (winner != null || playersPoints.length == 9) {
       stop();

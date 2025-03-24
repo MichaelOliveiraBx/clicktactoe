@@ -293,4 +293,137 @@ $GamePointCoordinatesCopyWith<$Res> get coordinates {
 }
 }
 
+/// @nodoc
+mixin _$GamePoints {
+
+ List<GamePoint> get points;
+/// Create a copy of GamePoints
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$GamePointsCopyWith<GamePoints> get copyWith => _$GamePointsCopyWithImpl<GamePoints>(this as GamePoints, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GamePoints&&const DeepCollectionEquality().equals(other.points, points));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(points));
+
+@override
+String toString() {
+  return 'GamePoints(points: $points)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $GamePointsCopyWith<$Res>  {
+  factory $GamePointsCopyWith(GamePoints value, $Res Function(GamePoints) _then) = _$GamePointsCopyWithImpl;
+@useResult
+$Res call({
+ List<GamePoint> points
+});
+
+
+
+
+}
+/// @nodoc
+class _$GamePointsCopyWithImpl<$Res>
+    implements $GamePointsCopyWith<$Res> {
+  _$GamePointsCopyWithImpl(this._self, this._then);
+
+  final GamePoints _self;
+  final $Res Function(GamePoints) _then;
+
+/// Create a copy of GamePoints
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? points = null,}) {
+  return _then(_self.copyWith(
+points: null == points ? _self.points : points // ignore: cast_nullable_to_non_nullable
+as List<GamePoint>,
+  ));
+}
+
+}
+
+
+/// @nodoc
+
+
+class _GamePoints implements GamePoints {
+  const _GamePoints({final  List<GamePoint> points = const []}): _points = points;
+  
+
+ final  List<GamePoint> _points;
+@override@JsonKey() List<GamePoint> get points {
+  if (_points is EqualUnmodifiableListView) return _points;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_points);
+}
+
+
+/// Create a copy of GamePoints
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$GamePointsCopyWith<_GamePoints> get copyWith => __$GamePointsCopyWithImpl<_GamePoints>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GamePoints&&const DeepCollectionEquality().equals(other._points, _points));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_points));
+
+@override
+String toString() {
+  return 'GamePoints(points: $points)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$GamePointsCopyWith<$Res> implements $GamePointsCopyWith<$Res> {
+  factory _$GamePointsCopyWith(_GamePoints value, $Res Function(_GamePoints) _then) = __$GamePointsCopyWithImpl;
+@override @useResult
+$Res call({
+ List<GamePoint> points
+});
+
+
+
+
+}
+/// @nodoc
+class __$GamePointsCopyWithImpl<$Res>
+    implements _$GamePointsCopyWith<$Res> {
+  __$GamePointsCopyWithImpl(this._self, this._then);
+
+  final _GamePoints _self;
+  final $Res Function(_GamePoints) _then;
+
+/// Create a copy of GamePoints
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? points = null,}) {
+  return _then(_GamePoints(
+points: null == points ? _self._points : points // ignore: cast_nullable_to_non_nullable
+as List<GamePoint>,
+  ));
+}
+
+
+}
+
 // dart format on
