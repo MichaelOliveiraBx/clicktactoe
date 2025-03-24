@@ -1,6 +1,7 @@
 import 'package:clicktactoe/modules/game/core/manager/GameState.dart';
 import 'package:clicktactoe/modules/game/core/manager/LocalGameStateManager.dart';
-import 'package:clicktactoe/modules/game/core/usecase/GetPlayerWinnerUseCase.dart';
+import 'package:clicktactoe/modules/game/usecase/GetPlayerStateNotifierProvider.dart';
+import 'package:clicktactoe/modules/game/usecase/GetPlayerWinnerUseCase.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GameConfiguration.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePlayer.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePoint.dart';
@@ -58,19 +59,19 @@ void main() {
 
     return createContainer(
       overrides: [
-        getPlayerStateNotifierProvider(
+        getPlayerStateNotifierProviderProvider(
           configuration.player1Type,
           GamePlayer.player1,
         ).overrideWithValue(mockProvider1),
-        getPlayerStateNotifierProvider(
+        getPlayerStateNotifierProviderProvider(
           configuration.player2Type,
           GamePlayer.player2,
         ).overrideWithValue(mockProvider2),
-        getPlayerNotifierProvider(
+        getPlayerNotifierProviderProvider(
           configuration.player1Type,
           GamePlayer.player1,
         ).overrideWithValue(mockNotifierProvider1),
-        getPlayerNotifierProvider(
+        getPlayerNotifierProviderProvider(
           configuration.player2Type,
           GamePlayer.player2,
         ).overrideWithValue(mockNotifierProvider2),

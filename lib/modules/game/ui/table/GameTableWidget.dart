@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:clicktactoe/modules/game/interfaces/domain/GameConfiguration.dart';
 import 'package:clicktactoe/modules/game/ui/table/GameTableUiState.dart';
 import 'package:clicktactoe/modules/game/ui/table/GameTableUiStateNotifier.dart';
@@ -18,6 +20,7 @@ class GameTableWidget extends ConsumerStatefulWidget {
 class _GameTableWidgetState extends ConsumerState<GameTableWidget>
     with SingleTickerProviderStateMixin {
   late AnimationController _gridAnimationController;
+  late StreamSubscription _eventSubscription;
 
   @override
   void initState() {
@@ -30,11 +33,22 @@ class _GameTableWidgetState extends ConsumerState<GameTableWidget>
     _gridAnimationController.addListener(() {
       setState(() {});
     });
+
+    _eventSubscription = ref
+        .read(gameTableUiStateNotifierProvider(widget.configuration).notifier)
+        .eventStream
+        .listen((event) {
+          if (event is GameTableEventRestartGridAnimation) {
+            _gridAnimationController.reset();
+            _gridAnimationController.forward();
+          }
+        });
   }
 
   @override
   void dispose() {
     _gridAnimationController.dispose();
+    _eventSubscription.cancel();
     super.dispose();
   }
 
@@ -45,6 +59,7 @@ class _GameTableWidgetState extends ConsumerState<GameTableWidget>
     final uiState = ref.watch(
       gameTableUiStateNotifierProvider(widget.configuration),
     );
+
     return SizedBox(
       width: size,
       height: size,

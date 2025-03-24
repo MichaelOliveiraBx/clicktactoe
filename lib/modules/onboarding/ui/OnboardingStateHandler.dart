@@ -1,8 +1,8 @@
 import 'dart:developer' as developer;
 
 import 'package:clicktactoe/modules/game/interfaces/domain/GameConfiguration.dart';
-import 'package:clicktactoe/modules/onboarding/domain/ClickTacToeOnboardingConfiguration.dart';
-import 'package:clicktactoe/modules/onboarding/domain/OnboardingConfiguration.dart';
+import 'package:clicktactoe/modules/onboarding/interfaces/ClickTacToeOnboardingConfiguration.dart';
+import 'package:clicktactoe/modules/onboarding/interfaces/OnboardingConfiguration.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

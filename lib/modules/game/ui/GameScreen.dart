@@ -75,49 +75,86 @@ class _GameScreenState extends ConsumerState<GameScreen>
     }
 
     return AppScaffold(
-      child: Stack(
-        children: [
-          Positioned(
-            top: 4,
-            right: 16,
-            child: IconButton(
-              icon: Icon(Icons.close),
-              color: Theme.of(context).primaryColor,
-              onPressed: () {
-                context.pop();
+      child: Container(
+        constraints: BoxConstraints(
+          minHeight: double.infinity,
+          maxHeight: double.infinity,
+          minWidth: 200,
+          maxWidth: 500,
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              top: 4,
+              right: 16,
+              child: IconButton(
+                icon: Icon(Icons.close),
+                color: Theme.of(context).primaryColor,
+                onPressed: () {
+                  context.pop();
+                },
+              ),
+            ),
+            Column(
+              children: [
+                Spacer(flex: 6),
+                Text(
+                  context.l10n.appName,
+                  style: Theme.of(context).textTheme.headlineLarge,
+                  textAlign: TextAlign.center,
+                ),
+                Spacer(flex: 5),
+                _buildPlayerScores(state),
+                Spacer(flex: 5),
+                _buildTurn(state),
+                SizedBox(height: 40),
+                GameTableWidget(configuration: widget.configuration),
+                Spacer(flex: 6),
+                _restartBuildRestartButton(),
+                Spacer(flex: 6),
+              ],
+            ),
+            Align(
+              alignment: Alignment(0, 0.38),
+              child: _buildEndWidget(state.endedUiState),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTurn(GameScreenUiState state) {
+    return AnimatedOpacity(
+      opacity: state.status == EndedTurnType.none ? 0 : 1,
+      duration: Duration(milliseconds: 500),
+      child: SizedBox(
+        height: 28,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CrossFadeSwitcher(
+              child: switch (state.status) {
+                EndedTurnType.none => SizedBox(key: ValueKey(state.status)),
+                EndedTurnType.player1 => AspectRatio(
+                  key: ValueKey(state.status),
+                  aspectRatio: 1,
+                  child: PointWidget(isPlayer1: true, withAnimation: false),
+                ),
+                EndedTurnType.player2 => AspectRatio(
+                  key: ValueKey(state.status),
+                  aspectRatio: 1,
+                  child: PointWidget(isPlayer1: false, withAnimation: false),
+                ),
               },
             ),
-          ),
-          Column(
-            children: [
-              Spacer(flex: 6),
-              Text(
-                context.l10n.appName,
-                style: Theme.of(context).textTheme.headlineLarge,
-                textAlign: TextAlign.center,
-              ),
-              Spacer(flex: 5),
-              _buildPlayerScores(state),
-              Spacer(flex: 5),
-              CrossFadeSwitcher(
-                child: Text(
-                  key: ValueKey(state.status),
-                  state.status.message(context),
-                  style: Theme.of(context).textTheme.displaySmall,
-                ),
-              ),
-              SizedBox(height: 40),
-              GameTableWidget(configuration: widget.configuration),
-              Spacer(flex: 6),
-              _restartBuildRestartButton(),
-              Spacer(flex: 6),
-            ],
-          ),
-          Align(
-            alignment: Alignment(0, 0.38),
-            child: _buildEndWidget(state.endedUiState),
-          ),
-        ],
+            SizedBox(width: 16),
+            Text(
+              context.l10n.gamePlayerTurn.toUpperCase(),
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -233,18 +270,5 @@ class _GameScreenState extends ConsumerState<GameScreen>
         ),
       ),
     );
-  }
-}
-
-extension EndedTurnTypeLocalized on EndedTurnType {
-  String message(BuildContext context) {
-    switch (this) {
-      case EndedTurnType.none:
-        return "";
-      case EndedTurnType.player1:
-        return context.l10n.gamePlayer1turn;
-      case EndedTurnType.player2:
-        return context.l10n.gamePlayer2turn;
-    }
   }
 }

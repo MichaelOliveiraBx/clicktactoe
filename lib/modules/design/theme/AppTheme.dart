@@ -29,6 +29,11 @@ ThemeData buildTheme(brightness) {
             fontWeight: FontWeight.w900,
             color: baseTheme.colorScheme.primary,
           ),
+          headlineSmall: GoogleFonts.bricolageGrotesque(
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
+            color: baseTheme.colorScheme.primary,
+          ),
           titleLarge: GoogleFonts.bricolageGrotesque(
             fontSize: 18,
             fontWeight: FontWeight.w700,

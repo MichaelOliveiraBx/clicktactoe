@@ -33,10 +33,6 @@ class ChatGptAiPlayerProvider extends _$ChatGptAiPlayerProvider
       final gamePoint = await ref.read(
         getChatGptNextPointProvider(table).future,
       );
-      developer.log(
-        'cancellationToken:${cancellationToken.isCancelled}',
-        name: 'ChatGptAiPlayerProvider',
-      );
       if (cancellationToken.isCancelled) {
         return;
       }
@@ -74,7 +70,6 @@ OpenAI getChatGptClient(Ref ref) {
 Future<GamePoint> handleCallGpt(Ref ref, List<GamePoint> input) async {
   final openApi = ref.read(getChatGptClientProvider);
   final jsonTable = input.toJson();
-  developer.log('jsonTable:$jsonTable', name: 'ChatGpt');
   final request = ChatCompleteText(
     model: Gpt4OChatModel(),
     messages: [

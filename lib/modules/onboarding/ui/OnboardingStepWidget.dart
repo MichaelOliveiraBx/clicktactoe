@@ -1,4 +1,4 @@
-import 'package:clicktactoe/modules/onboarding/domain/OnboardingConfiguration.dart';
+import 'package:clicktactoe/modules/onboarding/interfaces/OnboardingConfiguration.dart';
 import 'package:clicktactoe/modules/onboarding/ui/OnboardingConfigurationLocalize.dart';
 import 'package:clicktactoe/modules/onboarding/ui/buttons/OnboardingButton.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,13 +30,15 @@ class OnboardingStepWidget extends StatelessWidget {
         const SizedBox(height: 30),
         ...step.buttons.map((button) {
           return Padding(
-            padding: EdgeInsets.symmetric(vertical: 8),
+            padding: EdgeInsets.symmetric(vertical: 16),
             child: SizedBox(
-              height: 80,
+              height: 96,
               child: OnboardingButton(
                 onClick: () => onButtonClick(button),
                 title: button.type.title(context),
                 enable: button.isEnabled,
+                icon: button.type.icon(context),
+                subtitle: button.type.description(context),
               ),
             ),
           );

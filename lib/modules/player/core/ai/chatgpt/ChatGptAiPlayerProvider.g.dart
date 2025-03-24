@@ -167,7 +167,7 @@ final getChatGptClientProvider = AutoDisposeProvider<OpenAI>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef GetChatGptClientRef = AutoDisposeProviderRef<OpenAI>;
-String _$handleCallGptHash() => r'99e61a779924e5db40753492f33f6a0185ddc775';
+String _$handleCallGptHash() => r'b764777ca14c1137ca1b7be455b59131fa2f4609';
 
 /// See also [handleCallGpt].
 @ProviderFor(handleCallGpt)
@@ -289,7 +289,7 @@ class _HandleCallGptProviderElement
 }
 
 String _$chatGptAiPlayerProviderHash() =>
-    r'858b4fa16e08f0f7db4aed9eb56873a90a9b4cf9';
+    r'148d097530e0fe63eb5167d3a881cc5b836b4ba4';
 
 abstract class _$ChatGptAiPlayerProvider
     extends BuildlessAutoDisposeNotifier<PlayerState> {

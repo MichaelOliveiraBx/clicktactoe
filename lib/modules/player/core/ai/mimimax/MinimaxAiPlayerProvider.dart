@@ -31,14 +31,12 @@ class MinimaxAiPlayerProvider extends _$MinimaxAiPlayerProvider
     await Future.microtask(() async {
       await Future.delayed(const Duration(milliseconds: 700));
       final newPoint =
-          TicTacToe(board: table.toTicTacToeBoard()).findBestMove();
+          TicTacToeMinimaxHandler(
+            board: table.toTicTacToeBoard(),
+          ).findBestMove();
 
       final newGamePoint = newPoint.toGamePoint(GamePlayer.player2);
 
-      developer.log(
-        'AI move: $newPoint newGamePoint:$newGamePoint',
-        name: 'ChatGptAiPlayerProvider',
-      );
       if (cancellationToken.isCancelled) {
         return;
       }
@@ -57,12 +55,10 @@ class MinimaxAiPlayerProvider extends _$MinimaxAiPlayerProvider
 
 extension IntGameExtension on List<int> {
   GamePoint toGamePoint(GamePlayer player) {
-    final gamePoint = GamePoint(
+    return GamePoint(
       player: player,
       coordinates: GamePointCoordinates(x: this[1], y: this[0]),
     );
-    developer.log('To GamePoint - $this, $gamePoint', name: 'TicTacToe');
-    return gamePoint;
   }
 }
 
@@ -79,25 +75,23 @@ extension GamePointExtension on List<GamePoint> {
 
 extension GamePointToTicTacToeBoard on List<GamePoint> {
   List<List<int>> toTicTacToeBoard() {
-    developer.log('To TicTacToe - board - $this', name: 'TicTacToe');
     final board = List.generate(3, (_) => List.filled(3, 0));
     for (final point in this) {
       board[point.coordinates.y][point.coordinates.x] =
           point.player == GamePlayer.player2 ? 1 : -1;
     }
-    developer.log('To TicTacToe board $board', name: 'TicTacToe');
     return board;
   }
 }
 
-class TicTacToe {
+class TicTacToeMinimaxHandler {
   static const int player = -1;
   static const int ai = 1;
   static const int empty = 0;
 
   List<List<int>> board;
 
-  TicTacToe({required this.board});
+  TicTacToeMinimaxHandler({required this.board});
 
   bool isMovesLeft() {
     for (var row in board) {

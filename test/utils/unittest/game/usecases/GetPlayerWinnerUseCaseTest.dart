@@ -1,4 +1,4 @@
-import 'package:clicktactoe/modules/game/core/usecase/GetPlayerWinnerUseCase.dart';
+import 'package:clicktactoe/modules/game/usecase/GetPlayerWinnerUseCase.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePlayer.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePoint.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePointStatus.dart';

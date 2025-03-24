@@ -1,15 +1,29 @@
+import 'dart:async';
+import 'dart:developer' as developer;
+
 import 'package:clicktactoe/modules/game/core/manager/LocalGameStateManager.dart';
-import 'package:clicktactoe/modules/game/core/usecase/GetGameTableUiState.dart';
+import 'package:clicktactoe/modules/game/usecase/GetGameTableUiState.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GameConfiguration.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePoint.dart';
 import 'package:clicktactoe/modules/game/ui/table/GameTableUiState.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'dart:developer' as developer;
 
+part 'GameTableUiStateNotifier.freezed.dart';
 part 'GameTableUiStateNotifier.g.dart';
+
+@freezed
+sealed class GameTableEvent with _$GameTableEvent {
+  const factory GameTableEvent.restartGridAnimation() =
+      GameTableEventRestartGridAnimation;
+}
 
 @riverpod
 class GameTableUiStateNotifier extends _$GameTableUiStateNotifier {
+  final eventController = StreamController<GameTableEvent>();
+
+  get eventStream => eventController.stream;
+
   GameConfiguration? _configuration;
 
   @override
@@ -17,6 +31,13 @@ class GameTableUiStateNotifier extends _$GameTableUiStateNotifier {
     _configuration = configuration;
 
     final gameState = ref.watch(localGameStateManagerProvider(configuration));
+    developer.log(
+      'GameTableUiStateNotifier build gameState: $gameState',
+      name: 'GameTableUiStateNotifier',
+    );
+    if (gameState.table.isEmpty) {
+      eventController.add(GameTableEventRestartGridAnimation());
+    }
     final gameUiState = ref.read(getGameTableUiStateProvider(gameState));
     return gameUiState;
   }
