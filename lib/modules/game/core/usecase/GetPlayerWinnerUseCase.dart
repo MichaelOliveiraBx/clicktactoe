@@ -170,4 +170,5 @@ List<GamePoint>? _checkIfHasWinnerInDiagonal(List<GamePoint> points) {
       }
     }).toList();
   }
+  return null;
 }

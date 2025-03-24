@@ -8,6 +8,7 @@ import 'package:clicktactoe/modules/game/interfaces/domain/GameConfiguration.dar
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePlayer.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePoint.dart';
 import 'package:clicktactoe/modules/player/core/LocalPlayerHandler.dart';
+import 'package:clicktactoe/modules/player/core/ai/chatgpt/ChatGptAiPlayerProvider.dart';
 import 'package:clicktactoe/modules/player/core/ai/mimimax/MinimaxAiPlayerProvider.dart';
 import 'package:clicktactoe/modules/player/interfaces/PlayerHandler.dart';
 import 'package:clicktactoe/modules/player/interfaces/PlayerState.dart';
@@ -42,6 +43,8 @@ ProviderListenable<PlayerState> getPlayerStateNotifier(
     case PlayerTypeAI():
       return minimaxAiPlayerProviderProvider(player)
           as ProviderListenable<PlayerState>;
+      // return chatGptAiPlayerProviderProvider(player)
+      //     as ProviderListenable<PlayerState>;
     case PlayerTypeRemote():
       throw UnimplementedError();
   }
@@ -58,6 +61,7 @@ Refreshable<PlayerHandler> getPlayerNotifier(
       return localPlayerHandlerProvider(player).notifier;
     case PlayerTypeAI():
       return minimaxAiPlayerProviderProvider(player).notifier;
+      // return chatGptAiPlayerProviderProvider(player).notifier;
     case PlayerTypeRemote():
       throw UnimplementedError();
   }
@@ -112,7 +116,7 @@ class LocalGameStateManager extends _$LocalGameStateManager {
       );
     }
 
-    return GameStateIdle();
+    return GameStateIdle(table: playersPoints);
   }
 
   ProviderListenable<PlayerState> get _player1Provider {

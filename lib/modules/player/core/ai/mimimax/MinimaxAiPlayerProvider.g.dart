@@ -7,7 +7,7 @@ part of 'MinimaxAiPlayerProvider.dart';
 // **************************************************************************
 
 String _$minimaxAiPlayerProviderHash() =>
-    r'353c75a89d3453051a973163af52c21f9b3af01c';
+    r'7dcabbc57692ee11d512b6e96cbc21623cb4bd23';
 
 /// Copied from Dart SDK
 class _SystemHash {

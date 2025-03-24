@@ -24,24 +24,26 @@ class MinimaxAiPlayerProvider extends _$MinimaxAiPlayerProvider
 
   @override
   Future<void> handleMove(
-      List<GamePoint> table,
-      CancellationToken cancellationToken,
-      ) async {
+    List<GamePoint> table,
+    CancellationToken cancellationToken,
+  ) async {
     state = state.copyWith(isPlayerTour: true);
     await Future.microtask(() async {
       await Future.delayed(const Duration(milliseconds: 700));
-      final board = table.toBoard();
-      final newPoint = findBestMove(board).toGamePoint(GamePlayer.player2);
+      final newPoint =
+          TicTacToe(board: table.toTicTacToeBoard()).findBestMove();
+
+      final newGamePoint = newPoint.toGamePoint(GamePlayer.player2);
 
       developer.log(
-        'cancellationToken:${cancellationToken.isCancelled}',
+        'AI move: $newPoint newGamePoint:$newGamePoint',
         name: 'ChatGptAiPlayerProvider',
       );
       if (cancellationToken.isCancelled) {
         return;
       }
       state = state.copyWith(
-        points: state.points + [newPoint],
+        points: state.points + [newGamePoint],
         isPlayerTour: false,
       );
     });
@@ -53,110 +55,14 @@ class MinimaxAiPlayerProvider extends _$MinimaxAiPlayerProvider
   }
 }
 
-bool checkWin(List<int> board, int player) {
-  List<List<int>> winningCombinations = [
-    [0, 1, 2], [3, 4, 5], [6, 7, 8], // Lignes
-    [0, 3, 6], [1, 4, 7], [2, 5, 8], // Colonnes
-    [0, 4, 8], [2, 4, 6], // Diagonales
-  ];
-
-  for (var combo in winningCombinations) {
-    if (board[combo[0]] == player &&
-        board[combo[1]] == player &&
-        board[combo[2]] == player) {
-      return true;
-    }
-  }
-  return false;
-}
-
-int? evaluate(List<int> board) {
-  if (checkWin(board, 1)) {
-    return 1; // X gagne
-  } else if (checkWin(board, -1)) {
-    return -1; // O gagne
-  } else if (board.every((element) => element != 0)) {
-    return 0; // Match nul
-  }
-  return null; // Partie non terminée
-}
-
-// Minimax avec alpha-beta pruning
-int minimax(List<int> board, int depth, bool isMaximizing) {
-  final score = evaluate(board);
-  if (score != null) return score;
-
-  if (isMaximizing) {
-    int best = -999;
-    for (int i = 0; i < 9; i++) {
-      if (board[i] == 0) {
-        board[i] = -1; // O joue
-        best = max(best, minimax(board, depth + 1, false));
-        board[i] = 0; // Annule le coup
-      }
-    }
-    return best;
-  } else {
-    int best = 999;
-    for (int i = 0; i < 9; i++) {
-      if (board[i] == 0) {
-        board[i] = 1; // X joue
-        best = min(best, minimax(board, depth + 1, true));
-        board[i] = 0; // Annule le coup
-      }
-    }
-    return best;
-  }
-}
-
-// Trouver le meilleur coup pour l'IA
-int findBestMove(List<int> board) {
-  int bestVal = -999;
-  int bestMove = -1;
-
-  for (int i = 0; i < 9; i++) {
-    if (board[i] == 0) {
-      board[i] = -1; // O joue
-      int moveVal = minimax(board, 0, false);
-      board[i] = 0; // Annule le coup
-      if (moveVal > bestVal) {
-        bestMove = i;
-        bestVal = moveVal;
-      }
-    }
-  }
-  return bestMove;
-}
-
-int findBestMove2(List<int> board) {
-  int bestVal = -999;
-  List<int> bestMoves = []; // Liste des meilleurs coups possibles
-
-  for (int i = 0; i < 9; i++) {
-    if (board[i] == 0) {
-      board[i] = -1;
-      int moveVal = minimax(board, 0, false);
-      board[i] = 0;
-
-      if (moveVal > bestVal) {
-        bestMoves = [i]; // Nouveau meilleur coup
-        bestVal = moveVal;
-      } else if (moveVal == bestVal) {
-        bestMoves.add(i); // Ajoute un autre coup équivalent
-      }
-    }
-  }
-
-  // Sélectionne un coup au hasard parmi les meilleurs
-  return bestMoves[Random().nextInt(bestMoves.length)];
-}
-
-extension IntGameExtension on int {
+extension IntGameExtension on List<int> {
   GamePoint toGamePoint(GamePlayer player) {
-    return GamePoint(
+    final gamePoint = GamePoint(
       player: player,
-      coordinates: GamePointCoordinates(x: this % 3, y: this ~/ 3),
+      coordinates: GamePointCoordinates(x: this[1], y: this[0]),
     );
+    developer.log('To GamePoint - $this, $gamePoint', name: 'TicTacToe');
+    return gamePoint;
   }
 }
 
@@ -168,5 +74,117 @@ extension GamePointExtension on List<GamePoint> {
           point.player == GamePlayer.player1 ? 1 : -1;
     }
     return board;
+  }
+}
+
+extension GamePointToTicTacToeBoard on List<GamePoint> {
+  List<List<int>> toTicTacToeBoard() {
+    developer.log('To TicTacToe - board - $this', name: 'TicTacToe');
+    final board = List.generate(3, (_) => List.filled(3, 0));
+    for (final point in this) {
+      board[point.coordinates.y][point.coordinates.x] =
+          point.player == GamePlayer.player2 ? 1 : -1;
+    }
+    developer.log('To TicTacToe board $board', name: 'TicTacToe');
+    return board;
+  }
+}
+
+class TicTacToe {
+  static const int player = -1;
+  static const int ai = 1;
+  static const int empty = 0;
+
+  List<List<int>> board;
+
+  TicTacToe({required this.board});
+
+  bool isMovesLeft() {
+    for (var row in board) {
+      for (var cell in row) {
+        if (cell == empty) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  int evaluate() {
+    // Check rows, columns, and diagonals for a win
+    for (int i = 0; i < 3; i++) {
+      if (board[i][0] == board[i][1] && board[i][1] == board[i][2]) {
+        if (board[i][0] == player) return 10;
+        if (board[i][0] == ai) return -10;
+      }
+      if (board[0][i] == board[1][i] && board[1][i] == board[2][i]) {
+        if (board[0][i] == player) return 10;
+        if (board[0][i] == ai) return -10;
+      }
+    }
+    if (board[0][0] == board[1][1] && board[1][1] == board[2][2]) {
+      if (board[0][0] == player) return 10;
+      if (board[0][0] == ai) return -10;
+    }
+    if (board[0][2] == board[1][1] && board[1][1] == board[2][0]) {
+      if (board[0][2] == player) return 10;
+      if (board[0][2] == ai) return -10;
+    }
+    return 0;
+  }
+
+  int minimax(int depth, bool isMax) {
+    int score = evaluate();
+
+    if (score == 10) return score - depth;
+    if (score == -10) return score + depth;
+    if (!isMovesLeft()) return 0;
+
+    if (isMax) {
+      int best = -1000;
+      for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+          if (board[i][j] == empty) {
+            board[i][j] = player;
+            best = max(best, minimax(depth + 1, !isMax));
+            board[i][j] = empty;
+          }
+        }
+      }
+      return best;
+    } else {
+      int best = 1000;
+      for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+          if (board[i][j] == empty) {
+            board[i][j] = ai;
+            best = min(best, minimax(depth + 1, isMax));
+            board[i][j] = empty;
+          }
+        }
+      }
+      return best;
+    }
+  }
+
+  List<int> findBestMove() {
+    int bestVal = -1000;
+    List<int> bestMove = [-1, -1];
+
+    for (int i = 0; i < 3; i++) {
+      for (int j = 0; j < 3; j++) {
+        if (board[i][j] == empty) {
+          board[i][j] = player;
+          int moveVal = minimax(0, false);
+          board[i][j] = empty;
+
+          if (moveVal > bestVal) {
+            bestMove = [i, j];
+            bestVal = moveVal;
+          }
+        }
+      }
+    }
+    return bestMove;
   }
 }

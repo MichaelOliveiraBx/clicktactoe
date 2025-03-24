@@ -7,7 +7,7 @@ part of 'GameScreenUiStateNotifier.dart';
 // **************************************************************************
 
 String _$gameScreenUiStateNotifierHash() =>
-    r'dd97cfcdddb5d0efe1e21c2fd51ca250ce3267bb';
+    r'ab8889ac70bd86f0bd50d21021909fc7298f882a';
 
 /// Copied from Dart SDK
 class _SystemHash {
