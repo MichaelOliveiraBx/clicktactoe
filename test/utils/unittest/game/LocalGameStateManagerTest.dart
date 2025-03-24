@@ -172,6 +172,66 @@ void main() {
       );
     });
 
+    test("Check players are equality", () async {
+      final gameStateSubscription = getSubscription();
+      final player1Points = [
+        GamePoint(
+          player: GamePlayer.player1,
+          coordinates: GamePointCoordinates(x: 0, y: 0),
+        ),
+        GamePoint(
+          player: GamePlayer.player1,
+          coordinates: GamePointCoordinates(x: 1, y: 1),
+        ),
+        GamePoint(
+          player: GamePlayer.player1,
+          coordinates: GamePointCoordinates(x: 2, y: 1),
+        ),
+        GamePoint(
+          player: GamePlayer.player1,
+          coordinates: GamePointCoordinates(x: 1, y: 2),
+        ),
+        GamePoint(
+          player: GamePlayer.player1,
+          coordinates: GamePointCoordinates(x: 2, y: 0),
+        ),
+      ];
+
+      final player2Points = [
+        GamePoint(
+          player: GamePlayer.player2,
+          coordinates: GamePointCoordinates(x: 0, y: 1),
+        ),
+        GamePoint(
+          player: GamePlayer.player2,
+          coordinates: GamePointCoordinates(x: 0, y: 2),
+        ),
+        GamePoint(
+          player: GamePlayer.player2,
+          coordinates: GamePointCoordinates(x: 1, y: 0),
+        ),
+        GamePoint(
+          player: GamePlayer.player2,
+          coordinates: GamePointCoordinates(x: 2, y: 2),
+        ),
+      ];
+
+      player1StateHandler.setState(
+        PlayerState(isPlayerTour: false, points: player1Points),
+      );
+      player2StateHandler.setState(
+        PlayerState(isPlayerTour: true, points: player2Points),
+      );
+
+      expect(
+        gameStateSubscription.read(),
+        GameStateEnded(
+          table: [...player1Points, ...player2Points],
+          playerWinner: null,
+        ),
+      );
+    });
+
     test("Start call player 1 handle move", () async {
       final notifier = container.read(
         localGameStateManagerProvider(configuration).notifier,

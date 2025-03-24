@@ -21,8 +21,8 @@ abstract class WinnerData with _$WinnerData {
 @riverpod
 WinnerData? getPlayerWinnerUseCase(
   Ref ref,
-    GamePoints player1,
-    GamePoints player2,
+  GamePoints player1,
+  GamePoints player2,
 ) {
   final player1Winner = _checkIfHasWinner(player1.points);
   if (player1Winner != null) {
