@@ -8,10 +8,11 @@ import 'package:clicktactoe/modules/game/interfaces/domain/GameConfiguration.dar
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePlayer.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePoint.dart';
 import 'package:clicktactoe/modules/player/core/LocalPlayerHandler.dart';
-import 'package:clicktactoe/modules/player/core/ai/chatgpt/ChatGptAiPlayerProvider.dart';
 import 'package:clicktactoe/modules/player/core/ai/mimimax/MinimaxAiPlayerProvider.dart';
 import 'package:clicktactoe/modules/player/interfaces/PlayerHandler.dart';
+import 'package:clicktactoe/modules/player/interfaces/PlayerState.dart';
 import 'package:clicktactoe/modules/player/interfaces/PlayerType.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'LocalGameStateManager.g.dart';
@@ -23,6 +24,40 @@ dynamic playerProvider(PlayerType type, GamePlayer player) {
     case PlayerTypeAI():
       // return chatGptAiPlayerProviderProvider(player);
       return minimaxAiPlayerProviderProvider(player);
+    case PlayerTypeRemote():
+      throw UnimplementedError();
+  }
+}
+
+@riverpod
+ProviderListenable<PlayerState> getPlayerStateNotifier(
+  Ref ref,
+  PlayerType type,
+  GamePlayer player,
+) {
+  switch (type) {
+    case PlayerTypeLocal():
+      return localPlayerHandlerProvider(player)
+          as ProviderListenable<PlayerState>;
+    case PlayerTypeAI():
+      return minimaxAiPlayerProviderProvider(player)
+          as ProviderListenable<PlayerState>;
+    case PlayerTypeRemote():
+      throw UnimplementedError();
+  }
+}
+
+@riverpod
+Refreshable<PlayerHandler> getPlayerNotifier(
+  Ref ref,
+  PlayerType type,
+  GamePlayer player,
+) {
+  switch (type) {
+    case PlayerTypeLocal():
+      return localPlayerHandlerProvider(player).notifier;
+    case PlayerTypeAI():
+      return minimaxAiPlayerProviderProvider(player).notifier;
     case PlayerTypeRemote():
       throw UnimplementedError();
   }
@@ -80,7 +115,7 @@ class LocalGameStateManager extends _$LocalGameStateManager {
     return GameStateIdle();
   }
 
-  dynamic get _player1Provider {
+  ProviderListenable<PlayerState> get _player1Provider {
     final configuration = _configuration;
     if (configuration == null) {
       developer.log(
@@ -90,10 +125,15 @@ class LocalGameStateManager extends _$LocalGameStateManager {
       );
       throw StateError('Configuration must not be null');
     }
-    return playerProvider(configuration.player1Type, GamePlayer.player1);
+    return ref.read(
+      getPlayerStateNotifierProvider(
+        configuration.player1Type,
+        GamePlayer.player1,
+      ),
+    );
   }
 
-  dynamic get _player2Provider {
+  Refreshable<PlayerHandler> get _player1Notifier {
     final configuration = _configuration;
     if (configuration == null) {
       developer.log(
@@ -103,15 +143,50 @@ class LocalGameStateManager extends _$LocalGameStateManager {
       );
       throw StateError('Configuration must not be null');
     }
-    return playerProvider(configuration.player2Type, GamePlayer.player2);
+    return ref.read(
+      getPlayerNotifierProvider(configuration.player1Type, GamePlayer.player1),
+    );
+  }
+
+  ProviderListenable<PlayerState> get _player2Provider {
+    final configuration = _configuration;
+    if (configuration == null) {
+      developer.log(
+        'Configuration is null',
+        name: 'LocalGameStateManager',
+        error: 'Configuration must not be null',
+      );
+      throw StateError('Configuration must not be null');
+    }
+    return ref.read(
+      getPlayerStateNotifierProvider(
+        configuration.player2Type,
+        GamePlayer.player2,
+      ),
+    );
+  }
+
+  Refreshable<PlayerHandler> get _player2Notifier {
+    final configuration = _configuration;
+    if (configuration == null) {
+      developer.log(
+        'Configuration is null',
+        name: 'LocalGameStateManager',
+        error: 'Configuration must not be null',
+      );
+      throw StateError('Configuration must not be null');
+    }
+    return ref.read(
+      getPlayerNotifierProvider(configuration.player2Type, GamePlayer.player2),
+    );
   }
 
   void start() {
     _playingCancellationToken.cancel();
     _playingCancellationToken = CancellationToken();
 
-    final player1 = ref.read(_player1Provider.notifier);
-    final player2 = ref.read(_player2Provider.notifier);
+    final player1 = ref.read(_player1Notifier);
+    final player2 = ref.read(_player2Notifier);
 
     player1.restart();
     player2.restart();
@@ -165,13 +240,13 @@ class LocalGameStateManager extends _$LocalGameStateManager {
       switch (currentState.playerTour) {
         case GamePlayer.player1:
           ref
-              .read(_player1Provider.notifier)
+              .read(_player1Notifier)
               .onPointSelected(
                 GamePoint(player: GamePlayer.player1, coordinates: point),
               );
         case GamePlayer.player2:
           ref
-              .read(_player2Provider.notifier)
+              .read(_player2Notifier)
               .onPointSelected(
                 GamePoint(player: GamePlayer.player2, coordinates: point),
               );

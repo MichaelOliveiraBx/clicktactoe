@@ -3,7 +3,7 @@ import 'package:clicktactoe/modules/game/interfaces/domain/GamePlayer.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePoint.dart';
 import 'package:clicktactoe/modules/player/interfaces/PlayerState.dart';
 
-abstract interface class PlayerHandler {
+abstract class PlayerHandler {
   void onPointSelected(GamePoint point) {}
 
   Future<void> handleMove(

@@ -1,67 +1,25 @@
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePlayer.dart';
 import 'package:clicktactoe/modules/game/interfaces/domain/GamePoint.dart';
 import 'package:clicktactoe/modules/sdk/extensions/collections/ListExtension.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-sealed class GameState {
-  final List<GamePoint> table;
-  final GamePlayer? playerWinnings;
+part 'GameState.freezed.dart';
 
-  GameState({required this.table, this.playerWinnings});
+@freezed
+sealed class GameState with _$GameState {
+  const factory GameState.idle({
+    @Default([]) List<GamePoint> table,
+  }) = GameStateIdle;
 
-  @override
-  String toString() {
-    return 'GameState{table: $table}';
-  }
-}
+  const factory GameState.playing({
+    required List<GamePoint> table,
+    required GamePlayer playerTour,
+  }) = GameStatePlaying;
 
-class GameStateIdle extends GameState {
-  GameStateIdle({super.table = const []});
-
-  @override
-  String toString() {
-    return 'GameStateIdle{table: $table}';
-  }
-}
-
-class GameStatePlaying extends GameState {
-  final GamePlayer playerTour;
-
-  // final GamePlayer? playerWinnings;
-
-  GameStatePlaying({
-    required super.table,
-    required this.playerTour,
-    super.playerWinnings,
-  });
-
-  factory GameStatePlaying.fromStart(GamePlayer playerTour) {
-    return GameStatePlaying(table: const [], playerTour: playerTour);
-  }
-
-  // copy with
-  GameStatePlaying copyWith({List<GamePoint>? table, GamePlayer? playerTour}) {
-    return GameStatePlaying(
-      table: table ?? this.table,
-      playerTour: playerTour ?? this.playerTour,
-      playerWinnings: playerWinnings,
-    );
-  }
-
-  @override
-  String toString() {
-    return 'GameStatePlaying{playerTour: $playerTour, playerWinnings: $playerWinnings, table: $table}';
-  }
-}
-
-class GameStateEnded extends GameState {
-  final GamePlayer? playerWinner;
-
-  GameStateEnded({required super.table, this.playerWinner});
-
-  @override
-  String toString() {
-    return 'GameStateWinner{playerWinner: $playerWinner, table: $table}';
-  }
+  const factory GameState.ended({
+    required List<GamePoint> table,
+    GamePlayer? playerWinner,
+  }) = GameStateEnded;
 }
 
 extension GameStateExtension on GameState {
