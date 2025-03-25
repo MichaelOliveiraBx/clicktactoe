@@ -54,7 +54,7 @@ class _GameTableWidgetState extends ConsumerState<GameTableWidget>
 
   @override
   Widget build(BuildContext context) {
-    final size = (MediaQuery.sizeOf(context).width * 0.8);
+    final size = (MediaQuery.sizeOf(context).width * 0.8).clamp(0.0, 400.0);
 
     final uiState = ref.watch(
       gameTableUiStateNotifierProvider(widget.configuration),

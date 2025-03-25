@@ -170,7 +170,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
       return SizedBox();
     }
 
-    final height = MediaQuery.sizeOf(context).width * 0.9;
+    final height = (MediaQuery.sizeOf(context).width * 0.9).clamp(0.0, 440.0);
 
     return SizedBox(
       height: height,
