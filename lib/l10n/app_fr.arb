@@ -1,7 +1,7 @@
 {
   "appName": "Clic Tac Toe",
-  "onboardingStepLocalOrRemoteTitle": "On se fait ca ici ou en ligne?",
-  "onboardingStepSelectLocalVersusTitle": "C'est maintenant \uD83D\uDC7B !! choisi contre qui tu veux jouer ?",
+  "onboardingStepLocalOrRemoteTitle": "On se fait ça ici ou en ligne?",
+  "onboardingStepSelectLocalVersusTitle": "C'est maintenant !! choisi contre qui tu veux jouer ?",
   "onboardingButtonLocal": "Ici !",
   "onboardingButtonLocalDescription": "Pas besoin d'internet on est bien ici",
   "onboardingButtonRemote": "En ligne !",
@@ -9,7 +9,7 @@
   "onboardingButton2Players": "1 VS 1",
   "onboardingButtonVsAI": "VS AI",
   "onboardingButton2PlayersDescription": "Affrontez vous pour voir qui est le meilleur !",
-  "onboardingButtonVsAIDescription": "Défie l'intelligence artificielle et test vos compétences !",
+  "onboardingButtonVsAIDescription": "Défie l'intelligence artificielle et testes tes compétences !",
   "gamePlayerTurn": "à ton tour",
   "commonReplay": "Rejouer",
   "commonWin": "Gagnant",

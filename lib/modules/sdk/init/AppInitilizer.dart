@@ -1,11 +1,19 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
 
 class AppInitializer {
   static Future<void> init() async {
     WidgetsFlutterBinding.ensureInitialized();
-    await windowManager.ensureInitialized();
 
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      await windowManager.ensureInitialized();
+      await _initWindowManager();
+    }
+  }
+
+  static _initWindowManager() async {
     WindowOptions windowOptions = const WindowOptions(
       size: Size(500, 800),
       minimumSize: Size(330, 720),
