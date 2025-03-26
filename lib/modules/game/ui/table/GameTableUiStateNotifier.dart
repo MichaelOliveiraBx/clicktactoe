@@ -31,10 +31,6 @@ class GameTableUiStateNotifier extends _$GameTableUiStateNotifier {
     _configuration = configuration;
 
     final gameState = ref.watch(localGameStateManagerProvider(configuration));
-    developer.log(
-      'GameTableUiStateNotifier build gameState: $gameState',
-      name: 'GameTableUiStateNotifier',
-    );
     if (gameState.table.isEmpty) {
       eventController.add(GameTableEventRestartGridAnimation());
     }
@@ -52,12 +48,6 @@ class GameTableUiStateNotifier extends _$GameTableUiStateNotifier {
       );
       return;
     }
-
-    developer.log(
-      'onPointSelected row: $row, column: $column',
-      name: 'GameTableUiStateNotifier',
-    );
-
     ref
         .read(localGameStateManagerProvider(configuration).notifier)
         .onPointSelected(GamePointCoordinates(x: row, y: column));

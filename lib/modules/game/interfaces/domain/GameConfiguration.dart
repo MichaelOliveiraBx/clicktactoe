@@ -13,7 +13,6 @@ abstract class GameConfiguration with _$GameConfiguration {
   }) = _GameConfiguration;
 
   static fromNavigationParams(Map<String, String> params) {
-    developer.log('GameConfiguration.fromNavigationParams: $params');
     return GameConfiguration(
       player1Type: PlayerType.fromKey(params['player_1']),
       player2Type: PlayerType.fromKey(params['player_2']),

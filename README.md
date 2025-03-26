@@ -13,7 +13,7 @@ The application is designed with clean architecture principles, making it easy t
 ## Platform Support
 
 **Clic** Tac Toe is ready for:
-- iOS
+- iOS (with app icon and splash screen setup)
 - Android
 - macOS
 
@@ -75,4 +75,4 @@ The application includes two AI player implementations:
    - Can be configured for different difficulty levels
    - Provides a more human-like playing experience with occasional mistakes
 
-By default the AI player is plug to the `MinimaxAiPlayerProvider`
+By default the AI player is plug to the `MinimaxAiPlayerProvider` and if you want to test chatGPT you can add the token in the `ChatGptAiPlayerProvider`

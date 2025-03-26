@@ -42,10 +42,6 @@ class GameScreenUiStateNotifier extends _$GameScreenUiStateNotifier {
     _configuration = configuration;
 
     final gameState = ref.watch(localGameStateManagerProvider(configuration));
-    developer.log(
-      'GameScreenUiStateNotifier build gameState: $gameState',
-      name: 'GameScreenUiStateNotifier',
-    );
     final EndedTurnType status;
     final GameScreenEndedUiState? endedUiState;
     switch (gameState) {

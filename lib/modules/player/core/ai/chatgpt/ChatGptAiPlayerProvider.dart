@@ -58,6 +58,8 @@ Future<GamePoint> getChatGptNextPoint(Ref ref, List<GamePoint> table) async {
 @riverpod
 OpenAI getChatGptClient(Ref ref) {
   return OpenAI.instance.build(
+    // TODO if you want test with chatgpt you can put you api key here
+    //  and change in GetPlayerStateNotifierProvider.dart to the good Notifier
     baseOption: HttpSetup(
       receiveTimeout: const Duration(seconds: 20),
       connectTimeout: const Duration(seconds: 20),
@@ -87,12 +89,8 @@ Future<GamePoint> handleCallGpt(Ref ref, List<GamePoint> input) async {
     maxToken: 200,
   );
   final response = await openApi.onChatCompletion(request: request);
-  response?.choices.forEach((element) {
-    print("CHOICE ${element.message?.content}");
-  });
   final responseHandle =
       response?.choices.map((e) => e.message?.content ?? '').toList() ?? [];
-  developer.log('responseHandle:${responseHandle.first}', name: 'ChatGpt');
   return responseHandle.first.gamePointFromJson(GamePlayer.player2);
 }
 
@@ -105,9 +103,7 @@ extension GamePointJson on GamePoint {
 extension StringGamePoint on String {
   GamePoint gamePointFromJson(GamePlayer player) {
     final updated = replaceAll("'", "\"");
-    developer.log('StringGamePoint $updated', name: 'ChatGpt');
     final map = json.decode(updated);
-    developer.log('map:$map', name: 'ChatGpt');
     return GamePoint(
       player: player,
       coordinates: GamePointCoordinates(x: map['x'], y: map['y']),
